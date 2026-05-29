@@ -1,0 +1,80 @@
+[
+  {
+    "id": "itemCode",
+    "label": "Item Code",
+    "type": "select",
+    "placeholder": "Select",
+    "width": "116px",
+    "options": [
+      { "value": "RM-001", "label": "RM-001" },
+      { "value": "RM-002", "label": "RM-002" },
+      { "value": "RM-003", "label": "RM-003" }
+    ]
+  },
+  {
+    "id": "itemName",
+    "label": "Item Name",
+    "type": "text",
+    "placeholder": "Item name",
+    "width": "180px"
+  },
+  {
+    "id": "hsn",
+    "label": "HSN",
+    "type": "text",
+    "placeholder": "HSN",
+    "width": "82px"
+  },
+  {
+    "id": "quantity",
+    "label": "Qty",
+    "type": "number",
+    "placeholder": "1",
+    "width": "68px",
+    "align": "right"
+  },
+  {
+    "id": "unit",
+    "label": "Unit",
+    "type": "text",
+    "placeholder": "PC",
+    "width": "68px"
+  },
+  {
+    "id": "rate",
+    "label": "Rate",
+    "type": "number",
+    "placeholder": "0",
+    "width": "80px",
+    "align": "right"
+  },
+  {
+    "id": "discount",
+    "label": "Disc%",
+    "type": "number",
+    "placeholder": "0",
+    "width": "64px",
+    "align": "right"
+  },
+  {
+    "id": "gst",
+    "label": "GST%",
+    "type": "select",
+    "placeholder": "0%",
+    "width": "78px",
+    "options": [
+      { "value": "0", "label": "0%" },
+      { "value": "5", "label": "5%" },
+      { "value": "12", "label": "12%" },
+      { "value": "18", "label": "18%" },
+      { "value": "28", "label": "28%" }
+    ]
+  },
+  {
+    "id": "amount",
+    "label": "Amount",
+    "type": "computed",
+    "width": "100px",
+    "align": "right"
+  }
+]

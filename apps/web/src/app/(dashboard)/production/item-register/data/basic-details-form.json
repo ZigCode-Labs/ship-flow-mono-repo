@@ -1,0 +1,114 @@
+{
+  "fields": [
+    {
+      "name": "name",
+      "label": "Name / Title",
+      "type": "text",
+      "placeholder": "e.g., Candle Stand Base",
+      "required": true,
+      "span": 1
+    },
+    {
+      "name": "type",
+      "label": "Item Type",
+      "type": "select",
+      "placeholder": "Select type",
+      "required": true,
+      "span": 1,
+      "options": [
+        { "value": "finished_goods", "label": "Finished Goods" },
+        { "value": "raw_material", "label": "Raw Material" },
+        { "value": "component", "label": "Component" },
+        { "value": "sub_assembly", "label": "Sub Assembly" }
+      ]
+    },
+    {
+      "name": "category",
+      "label": "Category",
+      "type": "text",
+      "placeholder": "e.g., Metal Parts, Packaging",
+      "span": 1
+    },
+    {
+      "name": "productionSource",
+      "label": "Production Source",
+      "type": "select",
+      "placeholder": "Select source",
+      "span": 1,
+      "options": [
+        { "value": "in_house", "label": "In-house" },
+        { "value": "outsourced", "label": "Outsourced" }
+      ]
+    },
+    {
+      "name": "manufacturer",
+      "label": "Manufacturer",
+      "type": "select",
+      "placeholder": "Select manufacturer",
+      "span": 1,
+      "options": [{ "value": "none", "label": "None" }]
+    },
+    {
+      "name": "quantity",
+      "label": "Quantity",
+      "type": "number",
+      "placeholder": "0",
+      "span": 1,
+      "min": 0
+    },
+    {
+      "name": "unit",
+      "label": "Unit",
+      "type": "select",
+      "placeholder": "Select unit",
+      "required": true,
+      "span": 1,
+      "options": [
+        { "value": "pcs", "label": "PCS" },
+        { "value": "kg", "label": "KG" },
+        { "value": "mtr", "label": "MTR" },
+        { "value": "set", "label": "SET" },
+        { "value": "box", "label": "BOX" }
+      ]
+    },
+    {
+      "name": "currency",
+      "label": "Currency",
+      "type": "select",
+      "placeholder": "Select currency",
+      "span": 1,
+      "options": [
+        { "value": "inr", "label": "INR" },
+        { "value": "usd", "label": "USD" },
+        { "value": "eur", "label": "EUR" },
+        { "value": "gbp", "label": "GBP" }
+      ]
+    },
+    {
+      "name": "description",
+      "label": "Description",
+      "type": "textarea",
+      "placeholder": "Item description...",
+      "span": 3,
+      "rows": 1
+    },
+    {
+      "name": "itemPrice",
+      "label": "Item Price",
+      "type": "text",
+      "placeholder": "Auto-calculated from components",
+      "placeholderEnabled": "Enter price manually",
+      "span": 1,
+      "hasToggle": true,
+      "toggleLabel": "Manual"
+    },
+    {
+      "name": "productionNotes",
+      "label": "Production Notes",
+      "type": "textarea",
+      "placeholder": "Internal production notes...",
+      "span": 2,
+      "rows": 3
+    }
+  ]
+}

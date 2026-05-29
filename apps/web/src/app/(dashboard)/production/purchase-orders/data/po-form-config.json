@@ -1,0 +1,177 @@
+{
+  "sections": [
+    {
+      "id": "po_details",
+      "title": "PO Details",
+      "icon": "box",
+      "fields": [
+        {
+          "id": "poNumber",
+          "name": "poNumber",
+          "label": "PO Number",
+          "type": "text",
+          "placeholder": "PO-00001",
+          "required": true,
+          "readOnly": true,
+          "autoGenerate": true
+        },
+        {
+          "id": "poContext",
+          "name": "poContext",
+          "label": "PO Context",
+          "type": "select",
+          "required": true,
+          "dataSource": "poContexts",
+          "defaultValue": "Domestic Purchase"
+        },
+        {
+          "id": "issueDate",
+          "name": "issueDate",
+          "label": "Issue Date",
+          "type": "date",
+          "required": true,
+          "defaultToday": true
+        },
+        {
+          "id": "expectedDeliveryDate",
+          "name": "expectedDeliveryDate",
+          "label": "Expected Delivery Date",
+          "type": "date",
+          "required": false
+        },
+        {
+          "id": "supplier",
+          "name": "supplier",
+          "label": "Supplier",
+          "type": "select",
+          "placeholder": "Select a supplier",
+          "required": true,
+          "dataSource": "suppliers"
+        },
+        {
+          "id": "supplierGstin",
+          "name": "supplierGstin",
+          "label": "Supplier GSTIN",
+          "type": "text",
+          "placeholder": "e.g., 27AABCU9603R1ZM",
+          "readOnly": false
+        },
+        {
+          "id": "supplierAddress",
+          "name": "supplierAddress",
+          "label": "Supplier Address",
+          "type": "textarea",
+          "placeholder": "Enter supplier address",
+          "span": 2
+        },
+        {
+          "id": "deliveryLocation",
+          "name": "deliveryLocation",
+          "label": "Delivery Location",
+          "type": "select",
+          "placeholder": "Select location",
+          "dataSource": "deliveryLocations"
+        },
+        {
+          "id": "currency",
+          "name": "currency",
+          "label": "Currency",
+          "type": "select",
+          "required": true,
+          "dataSource": "currencies",
+          "defaultValue": "INR"
+        },
+        {
+          "id": "paymentTerms",
+          "name": "paymentTerms",
+          "label": "Payment Terms",
+          "type": "text",
+          "placeholder": "e.g., Net 30 days"
+        },
+        {
+          "id": "shipToAddress",
+          "name": "shipToAddress",
+          "label": "Ship To Address",
+          "type": "textarea",
+          "placeholder": "Delivery address...",
+          "span": 2
+        }
+      ]
+    },
+    {
+      "id": "notes",
+      "title": "Notes",
+      "icon": "fileText",
+      "fields": [
+        {
+          "id": "notes",
+          "name": "notes",
+          "label": "Notes (prints on PO)",
+          "type": "textarea",
+          "placeholder": "Additional notes...",
+          "span": 2
+        },
+        {
+          "id": "internalNotes",
+          "name": "internalNotes",
+          "label": "Internal Notes",
+          "type": "textarea",
+          "placeholder": "Internal notes (will not appear on the PO)...",
+          "span": 2
+        }
+      ]
+    }
+  ],
+  "dataSources": {
+    "suppliers": [
+      {
+        "value": "supplier1",
+        "label": "ABC Suppliers Pvt Ltd",
+        "gstin": "27AABCU9603R1ZM",
+        "address": "123 Industrial Area, Mumbai, Maharashtra - 400001"
+      },
+      {
+        "value": "supplier2",
+        "label": "XYZ Manufacturing Co",
+        "gstin": "24GSPPK1234A1ZL",
+        "address": "456 Factory Road, Ahmedabad, Gujarat - 380001"
+      },
+      {
+        "value": "supplier3",
+        "label": "PQR Traders",
+        "gstin": "29AADCP1234C1ZV",
+        "address": "789 Commerce Street, Bangalore, Karnataka - 560001"
+      }
+    ],
+    "deliveryLocations": [
+      { "value": "warehouse1", "label": "Main Warehouse - Mumbai" },
+      { "value": "warehouse2", "label": "Secondary Warehouse - Delhi" },
+      { "value": "factory1", "label": "Production Facility - Pune" }
+    ],
+    "currencies": [
+      { "value": "INR", "label": "INR" },
+      { "value": "USD", "label": "USD" },
+      { "value": "EUR", "label": "EUR" },
+      { "value": "GBP", "label": "GBP" }
+    ],
+    "poContexts": [
+      { "value": "Domestic Purchase", "label": "Domestic Purchase" },
+      { "value": "Import Purchase", "label": "Import Purchase" }
+    ],
+    "gstRates": [
+      { "value": "0", "label": "0%" },
+      { "value": "5", "label": "5%" },
+      { "value": "12", "label": "12%" },
+      { "value": "18", "label": "18%" },
+      { "value": "28", "label": "28%" }
+    ],
+    "units": [
+      { "value": "pcs", "label": "Pieces" },
+      { "value": "kg", "label": "Kilograms" },
+      { "value": "m", "label": "Meters" },
+      { "value": "box", "label": "Boxes" },
+      { "value": "l", "label": "Liters" },
+      { "value": "set", "label": "Sets" }
+    ]
+  }
+}

@@ -1,0 +1,173 @@
+{
+  "sections": [
+    {
+      "id": "basic",
+      "title": "Basic Details",
+      "icon": "FileText",
+      "columns": 2,
+      "fields": [
+        {
+          "name": "name",
+          "label": "Name / Title",
+          "type": "text",
+          "placeholder": "e.g., Cotton Fabric, Steel Rod",
+          "required": true,
+          "span": 2
+        },
+        {
+          "name": "category",
+          "label": "Category",
+          "type": "text",
+          "placeholder": "e.g., Fabric, Metal, Chemical",
+          "span": 2
+        },
+        {
+          "name": "qtyOnHand",
+          "label": "Qty on Hand",
+          "type": "number",
+          "placeholder": "0",
+          "required": true,
+          "span": 1,
+          "helperText": "unitOnHand"
+        },
+        {
+          "name": "unit",
+          "label": "Unit",
+          "type": "select",
+          "placeholder": "Select unit",
+          "required": true,
+          "span": 1,
+          "options": [
+            { "value": "pcs", "label": "PCS" },
+            { "value": "kg", "label": "KG" },
+            { "value": "mtr", "label": "MTR" },
+            { "value": "set", "label": "SET" },
+            { "value": "box", "label": "BOX" },
+            { "value": "ltr", "label": "LTR" },
+            { "value": "sqft", "label": "SQFT" }
+          ]
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "type": "textarea",
+          "placeholder": "Brief description of the raw material...",
+          "span": 2,
+          "rows": 4
+        }
+      ]
+    },
+    {
+      "id": "purchase",
+      "title": "Purchase Defaults",
+      "icon": "Tag",
+      "columns": 3,
+      "fields": [
+        {
+          "name": "currency",
+          "label": "Currency",
+          "type": "select",
+          "required": true,
+          "span": 1,
+          "options": [
+            { "value": "inr", "label": "INR - Indian Rupee" },
+            { "value": "usd", "label": "USD - US Dollar" },
+            { "value": "eur", "label": "EUR - Euro" },
+            { "value": "gbp", "label": "GBP - British Pound" }
+          ]
+        },
+        {
+          "name": "standardRate",
+          "label": "Standard Rate",
+          "type": "number",
+          "placeholder": "0.00",
+          "required": true,
+          "span": 1,
+          "step": 0.01
+        },
+        {
+          "name": "preferredSupplier",
+          "label": "Preferred Supplier (optional)",
+          "type": "select",
+          "span": 1,
+          "options": [{ "value": "none", "label": "None" }]
+        },
+        {
+          "name": "hsnCode",
+          "label": "HSN Code",
+          "type": "text",
+          "placeholder": "e.g., 5208, 7214",
+          "span": 1
+        },
+        {
+          "name": "gstRate",
+          "label": "GST Rate (%)",
+          "type": "select",
+          "span": 1,
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "0", "label": "0%" },
+            { "value": "5", "label": "5%" },
+            { "value": "12", "label": "12%" },
+            { "value": "18", "label": "18%" },
+            { "value": "28", "label": "28%" }
+          ]
+        },
+        {
+          "name": "leadTime",
+          "label": "Lead Time (days)",
+          "type": "number",
+          "placeholder": "e.g., 7",
+          "span": 1,
+          "inputIcon": "clock"
+        }
+      ]
+    },
+    {
+      "id": "inventory",
+      "title": "Inventory & Stock",
+      "icon": "Box",
+      "columns": 3,
+      "fields": [
+        {
+          "name": "qtyOnHand",
+          "label": "Qty on Hand",
+          "type": "number",
+          "placeholder": "0",
+          "span": 1,
+          "helperText": "unitOnHand"
+        },
+        {
+          "name": "minReorderLevel",
+          "label": "Min Reorder Level",
+          "type": "number",
+          "placeholder": "0",
+          "span": 1,
+          "helperText": "reorderBelow"
+        },
+        {
+          "name": "reorderQuantity",
+          "label": "Reorder Quantity",
+          "type": "number",
+          "placeholder": "0",
+          "span": 1,
+          "helperText": "reorderQty"
+        },
+        {
+          "name": "storageLocation",
+          "label": "Storage Location (optional)",
+          "type": "select",
+          "span": 1,
+          "inputIcon": "mapPin",
+          "options": [{ "value": "none", "label": "None" }]
+        }
+      ]
+    },
+    {
+      "id": "attributes",
+      "title": "Dynamic Attributes",
+      "icon": "SlidersHorizontal",
+      "type": "dynamic"
+    }
+  ]
+}

@@ -1,0 +1,286 @@
+{
+  "codeSeries": [
+    {
+      "id": "item-register",
+      "category": "ITEM REGISTER",
+      "title": "Item Code",
+      "fields": {
+        "prefix": {
+          "label": "Prefix",
+          "type": "text",
+          "value": "PRD",
+          "placeholder": "E.G., 2526",
+          "validation": {
+            "required": true,
+            "maxLength": 10,
+            "pattern": "^[A-Z0-9]+$"
+          }
+        },
+        "suffix": {
+          "label": "Suffix (optional)",
+          "type": "text",
+          "value": "",
+          "placeholder": "E.G., 2526",
+          "validation": {
+            "required": false,
+            "maxLength": 10,
+            "pattern": "^[A-Z0-9]+$"
+          }
+        },
+        "digits": {
+          "label": "Digits",
+          "type": "select",
+          "value": 5,
+          "options": [3, 5],
+          "validation": {
+            "required": true,
+            "min": 3,
+            "max": 5
+          }
+        }
+      },
+      "preview": "PRD-00001"
+    },
+    {
+      "id": "purchase-orders",
+      "category": "PURCHASE ORDERS",
+      "title": "PO Code",
+      "fields": {
+        "prefix": {
+          "label": "Prefix",
+          "type": "text",
+          "value": "PO",
+          "placeholder": "E.G., 2526",
+          "validation": {
+            "required": true,
+            "maxLength": 10,
+            "pattern": "^[A-Z0-9]+$"
+          }
+        },
+        "suffix": {
+          "label": "Suffix (optional)",
+          "type": "text",
+          "value": "",
+          "placeholder": "E.G., 2526",
+          "validation": {
+            "required": false,
+            "maxLength": 10,
+            "pattern": "^[A-Z0-9]+$"
+          }
+        },
+        "digits": {
+          "label": "Digits",
+          "type": "select",
+          "value": 5,
+          "options": [3, 5],
+          "validation": {
+            "required": true,
+            "min": 3,
+            "max": 5
+          }
+        }
+      },
+      "preview": "PO-00001"
+    },
+    {
+      "id": "rm-purchases",
+      "category": "RM PURCHASES",
+      "title": "RM PO Code",
+      "fields": {
+        "prefix": {
+          "label": "Prefix",
+          "type": "text",
+          "value": "RMPO",
+          "placeholder": "E.G., 2526",
+          "validation": {
+            "required": true,
+            "maxLength": 10,
+            "pattern": "^[A-Z0-9]+$"
+          }
+        },
+        "suffix": {
+          "label": "Suffix (optional)",
+          "type": "text",
+          "value": "",
+          "placeholder": "E.G., 2526",
+          "validation": {
+            "required": false,
+            "maxLength": 10,
+            "pattern": "^[A-Z0-9]+$"
+          }
+        },
+        "digits": {
+          "label": "Digits",
+          "type": "select",
+          "value": 3,
+          "options": [3, 5],
+          "validation": {
+            "required": true,
+            "min": 3,
+            "max": 5
+          }
+        }
+      },
+      "preview": "RMPO-001"
+    },
+    {
+      "id": "job-work-orders",
+      "category": "JOB WORK ORDERS",
+      "title": "Job Work Code",
+      "fields": {
+        "prefix": {
+          "label": "Prefix",
+          "type": "text",
+          "value": "JW",
+          "placeholder": "E.G., 2526",
+          "validation": {
+            "required": true,
+            "maxLength": 10,
+            "pattern": "^[A-Z0-9]+$"
+          }
+        },
+        "suffix": {
+          "label": "Suffix (optional)",
+          "type": "text",
+          "value": "",
+          "placeholder": "E.G., 2526",
+          "validation": {
+            "required": false,
+            "maxLength": 10,
+            "pattern": "^[A-Z0-9]+$"
+          }
+        },
+        "digits": {
+          "label": "Digits",
+          "type": "select",
+          "value": 5,
+          "options": [3, 5],
+          "validation": {
+            "required": true,
+            "min": 3,
+            "max": 5
+          }
+        }
+      },
+      "preview": "JW-00001"
+    },
+    {
+      "id": "raw-materials-register",
+      "category": "RAW MATERIALS REGISTER",
+      "title": "RM Code",
+      "fields": {
+        "prefix": {
+          "label": "Prefix",
+          "type": "text",
+          "value": "RM",
+          "placeholder": "E.G., 2526",
+          "validation": {
+            "required": true,
+            "maxLength": 10,
+            "pattern": "^[A-Z0-9]+$"
+          }
+        },
+        "suffix": {
+          "label": "Suffix (optional)",
+          "type": "text",
+          "value": "",
+          "placeholder": "E.G., 2526",
+          "validation": {
+            "required": false,
+            "maxLength": 10,
+            "pattern": "^[A-Z0-9]+$"
+          }
+        },
+        "digits": {
+          "label": "Digits",
+          "type": "select",
+          "value": 3,
+          "options": [3, 5],
+          "validation": {
+            "required": true,
+            "min": 3,
+            "max": 5
+          }
+        }
+      },
+      "preview": "RM-001"
+    },
+    {
+      "id": "cost-sheets",
+      "category": "COST SHEETS",
+      "title": "CS Code",
+      "fields": {
+        "prefix": {
+          "label": "Prefix",
+          "type": "text",
+          "value": "CS",
+          "placeholder": "E.G., 2526",
+          "validation": {
+            "required": true,
+            "maxLength": 10,
+            "pattern": "^[A-Z0-9]+$"
+          }
+        },
+        "suffix": {
+          "label": "Suffix (optional)",
+          "type": "text",
+          "value": "",
+          "placeholder": "E.G., 2526",
+          "validation": {
+            "required": false,
+            "maxLength": 10,
+            "pattern": "^[A-Z0-9]+$"
+          }
+        },
+        "digits": {
+          "label": "Digits",
+          "type": "select",
+          "value": 3,
+          "options": [3, 5],
+          "validation": {
+            "required": true,
+            "min": 3,
+            "max": 5
+          }
+        }
+      },
+      "preview": "CS-001"
+    }
+  ],
+  "nextNumbers": {
+    "items": 1,
+    "po": 1,
+    "rmPo": 1,
+    "jobWork": 1,
+    "rm": 1,
+    "cs": 1
+  },
+  "defaults": {
+    "baseCurrency": {
+      "label": "Base Currency",
+      "type": "select",
+      "value": "INR",
+      "options": [
+        { "value": "INR", "label": "INR - Indian Rupee" },
+        { "value": "USD", "label": "USD - US Dollar" },
+        { "value": "EUR", "label": "EUR - Euro" },
+        { "value": "GBP", "label": "GBP - British Pound" },
+        { "value": "AED", "label": "AED - UAE Dirham" },
+        { "value": "JPY", "label": "JPY - Japanese Yen" },
+        { "value": "CNY", "label": "CNY - Chinese Yuan" }
+      ]
+    },
+    "paymentTerms": {
+      "label": "Payment Terms",
+      "type": "textarea",
+      "value": "",
+      "placeholder": "e.g. 50% advance, 50% on delivery",
+      "rows": 2
+    }
+  },
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2026-05-01",
+    "description": "Configuration for production module code series and default settings"
+  }
+}

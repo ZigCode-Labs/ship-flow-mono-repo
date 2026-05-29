@@ -1,0 +1,264 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  firstName String?
+  lastName  String?
+}
+
+model DocumentNumberSetting {
+  id             String       @id @default(uuid())
+  documentType   DocumentType @unique
+  prefix         String       @db.VarChar(10)
+  digits         Int          @default(5)
+  startingNumber Int          @default(1)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@map("document_number_settings")
+}
+
+enum DocumentType {
+  TAX_INVOICE
+  DOMESTIC_PROFORMA
+  CREDIT_NOTE
+  DELIVERY_CHALLAN
+}
+
+model DomesticProforma {
+  id                String                 @id @default(uuid())
+  proformaNumber    String                 @unique @db.VarChar(50)
+  date              DateTime
+  validUntil        DateTime
+  exchangeRate      Float
+  isRateLocked      Boolean                @default(false)
+  
+  sellerCompanyName String                 @db.VarChar(255)
+  sellerGstin       String                 @db.VarChar(50)
+  sellerState       String                 @db.VarChar(100)
+
+  customerName      String                 @db.VarChar(255)
+  customerGstin     String                 @db.VarChar(50)
+  placeOfSupply     String                 @db.VarChar(100)
+
+  discountValue     Float                  @default(0)
+  discountType      String                 @db.VarChar(10) @default("₹")
+  
+  subtotal          Float
+  discountAmount    Float                  @default(0)
+  taxableAmount     Float
+  igst              Float                  @default(0)
+  totalTax          Float
+  grandTotal        Float
+
+  paymentTerms      String?                @db.Text
+  reference         String?                @db.VarChar(255)
+  notes             String?                @db.Text
+  
+  status            String                 @default("DRAFT") @db.VarChar(50)
+
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+
+  lineItems         DomesticProformaItem[]
+
+  @@map("domestic_proformas")
+}
+
+model DomesticProformaItem {
+  id               String           @id @default(uuid())
+  proformaId       String
+  proforma         DomesticProforma @relation(fields: [proformaId], references: [id], onDelete: Cascade)
+  
+  itemCode         String           @db.VarChar(100)
+  description      String           @db.Text
+  hsn              String           @db.VarChar(50)
+  qty              Float
+  rate             Float
+  amount           Float
+  gstPercent       Float
+  total            Float
+
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@map("domestic_proforma_items")
+}
+
+model DeliveryChallan {
+  id                String                 @id @default(uuid())
+  challanNumber     String                 @unique @db.VarChar(50)
+  challanDate       DateTime
+  deliveryDate      DateTime?
+  deliveryType      String                 @db.VarChar(50) @default("supply_of_goods")
+  
+  companyName       String                 @db.VarChar(255)
+  gstin             String                 @db.VarChar(50) @default("")
+  state             String                 @db.VarChar(100) @default("")
+
+  customerId        String                 @db.VarChar(255) @default("")
+  customerName      String                 @db.VarChar(255)
+  customerGstin     String                 @db.VarChar(50) @default("")
+  buyerAddress      String                 @db.VarChar(500) @default("")
+  buyerState        String                 @db.VarChar(100) @default("")
+  placeOfSupply     String                 @db.VarChar(100)
+
+  transporterName   String?                @db.VarChar(255)
+  vehicleNumber     String?                @db.VarChar(50)
+  expectedDeliveryDate DateTime?
+
+  linkedInvoiceId   String?                @db.VarChar(255)
+  reference         String?                @db.VarChar(255)
+  notes             String?                @db.Text
+
+  exchangeRate      Float                  @default(1)
+
+  subtotal          Float
+  discount          Float                  @default(0)
+  taxableAmount     Float
+  totalTax          Float                  @default(0)
+  grandTotal        Float
+
+  status            String                 @default("draft") @db.VarChar(50)
+
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+
+  lineItems         DeliveryChallanItem[]
+
+  @@map("delivery_challans")
+}
+
+model DeliveryChallanItem {
+  id               String           @id @default(uuid())
+  challanId        String
+  challan          DeliveryChallan  @relation(fields: [challanId], references: [id], onDelete: Cascade)
+  
+  itemCode         String           @db.VarChar(100) @default("")
+  description      String           @db.Text
+  hsn              String           @db.VarChar(50) @default("")
+  quantity         Float
+  unit             String           @db.VarChar(20) @default("PCS")
+  rate             Float
+  amount           Float
+  gst              Float            @default(0)
+  total            Float
+
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@map("delivery_challan_items")
+}
+
+model TaxInvoice {
+  id             String   @id @default(uuid())
+  invoiceNumber  String   @unique @db.VarChar(50)
+  invoiceDate    DateTime
+  dueDate        DateTime?
+
+  exchangeRate   Float    @default(93.06)
+
+  companyName    String   @db.VarChar(255)
+  gstin          String   @db.VarChar(50)
+  state          String   @db.VarChar(100)
+
+  customerId     String   @db.VarChar(255)
+  customerName   String   @db.VarChar(255)
+  customerGstin  String   @db.VarChar(50)
+  placeOfSupply  String   @db.VarChar(100)
+
+  bankName       String?  @db.VarChar(150)
+  accountNumber  String?  @db.VarChar(50)
+  ifscCode       String?  @db.VarChar(11)
+  branch         String?  @db.VarChar(150)
+
+  paymentTerms   String?  @db.VarChar(255)
+  reference      String?  @db.VarChar(255)
+  notes          String?  @db.Text
+
+  amount         Float    @default(0)
+  subtotal       Float
+  discount       Float    @default(0)
+  taxableAmount  Float
+  igst           Float    @default(0)
+  totalTax       Float
+  grandTotal     Float
+
+  status         String   @default("draft") @db.VarChar(50)
+
+  deletedAt      DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  lineItems      TaxInvoiceLineItem[]
+
+  @@index([customerName])
+  @@index([status])
+  @@index([invoiceDate])
+  @@index([deletedAt])
+  @@map("tax_invoices")
+}
+
+model TaxInvoiceLineItem {
+  id            String     @id @default(uuid())
+  taxInvoiceId  String
+  taxInvoice    TaxInvoice @relation(fields: [taxInvoiceId], references: [id], onDelete: Cascade)
+
+  itemCode      String     @db.VarChar(100)
+  description   String     @db.Text
+  hsn           String     @db.VarChar(50)
+  quantity      Float
+  rate          Float
+  amount        Float
+  gst           Float
+  total         Float
+
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@map("tax_invoice_line_items")
+}
+
+model DomesticBuyer {
+  id          String  @id @default(uuid())
+  companyName String  @db.VarChar(255)
+  tradeName   String? @db.VarChar(255)
+  gstin       String  @unique @db.VarChar(15)
+  panNumber   String? @db.VarChar(10)
+
+  address String? @db.Text
+  city    String? @db.VarChar(100)
+  state   String  @db.VarChar(100)
+  pincode String? @db.VarChar(10)
+
+  contactPerson  String? @db.VarChar(150)
+  designation    String? @db.VarChar(150)
+  email          String? @db.VarChar(255)
+  phone          String? @db.VarChar(30)
+  alternatePhone String? @db.VarChar(30)
+
+  bankName      String? @db.VarChar(150)
+  accountNumber String? @db.VarChar(50)
+  ifscCode      String? @db.VarChar(11)
+  branch        String? @db.VarChar(150)
+
+  notes  String? @db.Text
+  status String  @default("active") @db.VarChar(20)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@map("domestic_buyers")
+}

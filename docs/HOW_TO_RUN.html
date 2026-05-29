@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShipFlow — How to Run</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #21253a;
+      --border: #2e3248;
+      --accent: #6c8bef;
+      --accent2: #a78bfa;
+      --green: #34d399;
+      --yellow: #fbbf24;
+      --red: #f87171;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --code-bg: #0d1117;
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
+      font-size: 15px;
+      line-height: 1.7;
+      padding: 0 16px 80px;
+    }
+
+    /* ── Layout ── */
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* ── Header ── */
+    header {
+      padding: 48px 0 32px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #fff;
+    }
+
+    header h1 span { color: var(--accent); }
+
+    header p {
+      color: var(--text-muted);
+      margin-top: 8px;
+      font-size: 0.95rem;
+    }
+
+    /* ── Nav pills ── */
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    nav a {
+      display: inline-block;
+      background: var(--surface2);
+      color: var(--accent);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.8rem;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    nav a:hover { background: var(--border); }
+
+    /* ── Section ── */
+    section {
+      margin-bottom: 52px;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2 .icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin: 24px 0 10px;
+    }
+
+    p { color: var(--text-muted); margin-bottom: 12px; }
+
+    /* ── Callout ── */
+    .callout {
+      display: flex;
+      gap: 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--yellow);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .callout.info { border-left-color: var(--accent); }
+    .callout.success { border-left-color: var(--green); }
+    .callout.danger { border-left-color: var(--red); }
+
+    .callout strong { color: var(--text); }
+
+    /* ── Tables ── */
+    .table-wrap { overflow-x: auto; margin-bottom: 20px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    thead tr { background: var(--surface2); }
+
+    th {
+      text-align: left;
+      padding: 10px 14px;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+      vertical-align: top;
+    }
+
+    td:first-child { color: var(--text); font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.8rem; }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--surface2); }
+
+    .table-wrap table { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+
+    /* ── Code blocks ── */
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    pre code {
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.83rem;
+      line-height: 1.65;
+      color: #cdd9e5;
+    }
+
+    /* syntax highlight spots */
+    .t-cmd { color: #79c0ff; }
+    .t-cmt { color: #6e7681; font-style: italic; }
+    .t-str { color: #a5d6ff; }
+    .t-kw  { color: #ff7b72; }
+    .t-num { color: #f2cc60; }
+
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 5px;
+      padding: 3px 10px;
+      font-size: 0.72rem;
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+
+    .copy-btn:hover { color: var(--text); }
+
+    /* ── Step list ── */
+    .steps { list-style: none; padding: 0; }
+
+    .steps li {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 6px;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 3px;
+    }
+
+    .step-body strong { color: var(--text); display: block; margin-bottom: 2px; font-size: 0.9rem; }
+    .step-body span { color: var(--text-muted); font-size: 0.85rem; }
+
+    /* ── Badge ── */
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 1px 8px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-green { background: rgba(52,211,153,0.15); color: var(--green); }
+    .badge-red   { background: rgba(248,113,113,0.15); color: var(--red); }
+    .badge-blue  { background: rgba(108,139,239,0.15); color: var(--accent); }
+    .badge-yellow{ background: rgba(251,191,36,0.15);  color: var(--yellow); }
+
+    /* ── Port cards ── */
+    .port-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .port-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+
+    .port-card .port-num {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .port-card .port-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .port-card .port-url {
+      font-family: monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 8px;
+      display: inline-block;
+    }
+
+    /* ── Env card ── */
+    .env-cards { display: flex; flex-direction: column; gap: 16px; }
+
+    .env-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .env-card-header {
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      font-size: 0.8rem;
+      font-family: monospace;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .env-card-header span { color: var(--text-muted); font-family: sans-serif; font-size: 0.75rem; }
+
+    .env-card pre { border: none; border-radius: 0; margin: 0; }
+
+    /* ── Quick ref ── */
+    .quick-ref {
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .quick-ref h3 { margin-top: 0; color: var(--accent); }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      margin-top: 60px;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      text-align: center;
+    }
+
+    code {
+      font-family: monospace;
+      font-size: 0.85em;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 6px;
+      color: var(--accent2);
+    }
+
+    ul { padding-left: 20px; color: var(--text-muted); }
+    ul li { margin-bottom: 4px; }
+
+    @media (max-width: 600px) {
+      h2 { font-size: 1.05rem; }
+      .port-cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── Header ── -->
+  <header>
+    <h1><span>Ship</span>Flow — How to Run</h1>
+    <p>Complete developer &amp; LLM reference: setup order, scripts, env vars, ports, DB migrations, and production deploy.</p>
+    <nav>
+      <a href="#packages">Packages</a>
+      <a href="#ports">Ports</a>
+      <a href="#prereqs">Prerequisites</a>
+      <a href="#envs">Env Files</a>
+      <a href="#first-time">First-Time Setup</a>
+      <a href="#database">Database Scripts</a>
+      <a href="#dev">Development</a>
+      <a href="#build">Build</a>
+      <a href="#production">Production</a>
+      <a href="#testing">Testing</a>
+      <a href="#quality">Code Quality</a>
+      <a href="#quickref">Quick Ref</a>
+    </nav>
+  </header>
+
+  <!-- ── Packages ── -->
+  <section id="packages">
+    <h2><span class="icon">📦</span> Packages at a Glance</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Path</th>
+            <th>Package Name</th>
+            <th>Role</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>apps/api</td>
+            <td>@shipflow/api</td>
+            <td>NestJS REST API backend</td>
+            <td><span class="badge badge-blue">App</span></td>
+          </tr>
+          <tr>
+            <td>apps/web</td>
+            <td>@shipflow/web</td>
+            <td>Next.js 16 frontend (App Router)</td>
+            <td><span class="badge badge-blue">App</span></td>
+          </tr>
+          <tr>
+            <td>packages/database</td>
+            <td>@shipflow/database</td>
+            <td>Prisma schema, migrations, Prisma Client, seed</td>
+            <td><span class="badge badge-green">Package</span></td>
+          </tr>
+          <tr>
+            <td>packages/shared</td>
+            <td>@shipflow/shared</td>
+            <td>Shared Zod validators and TypeScript types</td>
+            <td><span class="badge badge-green">Package</span></td>
+          </tr>
+          <tr>
+            <td>packages/api-tests</td>
+            <td>@shipflow/api-tests</td>
+            <td>Vitest integration tests against live API</td>
+            <td><span class="badge badge-yellow">Tests</span></td>
+          </tr>
+          <tr>
+            <td>packages/eslint-config</td>
+            <td>—</td>
+            <td>Shared ESLint configuration</td>
+            <td><span class="badge badge-green">Tooling</span></td>
+          </tr>
+          <tr>
+            <td>packages/typescript-config</td>
+            <td>—</td>
+            <td>Shared tsconfig bases</td>
+            <td><span class="badge badge-green">Tooling</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <div>⚠️ <strong>Reference folders</strong> — <code>ship-flow-api/</code> and <code>ship-flow-ui/</code> are previous-iteration wireframes. Never develop or import from them.</div>
+    </div>
+  </section>
+
+  <!-- ── Ports ── -->
+  <section id="ports">
+    <h2><span class="icon">🔌</span> Ports</h2>
+    <div class="port-cards">
+      <div class="port-card">
+        <div class="port-num">9000</div>
+        <div class="port-label">API — NestJS backend</div>
+        <div class="port-url">http://localhost:9000</div>
+      </div>
+      <div class="port-card">
+        <div class="port-num">9001</div>
+        <div class="port-label">Web — Next.js frontend</div>
+        <div class="port-url">http://localhost:9001</div>
+      </div>
+      <div class="port-card">
+        <div class="port-num">5432</div>
+        <div class="port-label">PostgreSQL (default)</div>
+        <div class="port-url">localhost:5432</div>
+      </div>
+      <div class="port-card">
+        <div class="port-num">5555</div>
+        <div class="port-label">Prisma Studio (on demand)</div>
+        <div class="port-url">http://localhost:5555</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Prerequisites ── -->
+  <section id="prereqs">
+    <h2><span class="icon">✅</span> Prerequisites</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tool</th><th>Version</th><th>Install</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Node.js</td>
+            <td>≥ 20</td>
+            <td>https://nodejs.org or via nvm</td>
+          </tr>
+          <tr>
+            <td>pnpm</td>
+            <td>9.15.0</td>
+            <td><code>npm install -g pnpm@9.15.0</code></td>
+          </tr>
+          <tr>
+            <td>PostgreSQL</td>
+            <td>any recent</td>
+            <td>Homebrew / Docker / installer</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── Env Files ── -->
+  <section id="envs">
+    <h2><span class="icon">🔑</span> Environment Files</h2>
+    <p>Create these files before running anything. They are git-ignored and never committed.</p>
+
+    <div class="env-cards">
+
+      <div class="env-card">
+        <div class="env-card-header">
+          apps/api/.env
+          <span>copy from apps/api/.env.example</span>
+        </div>
+        <pre><code><span class="t-cmt"># PostgreSQL connection</span>
+<span class="t-kw">DATABASE_URL</span>=<span class="t-str">"postgresql://postgres:ShipFlow@DB#2026@localhost:5432/ship_flow_dev?schema=public"</span>
+
+<span class="t-cmt"># JWT</span>
+<span class="t-kw">JWT_SECRET</span>=<span class="t-str">"super_secret"</span>
+
+<span class="t-cmt"># Server</span>
+<span class="t-kw">PORT</span>=<span class="t-num">9000</span>
+<span class="t-kw">NODE_ENV</span>=<span class="t-str">"development"</span>
+
+<span class="t-cmt"># CORS — must match web dev port</span>
+<span class="t-kw">FRONTEND_URL</span>=<span class="t-str">"http://localhost:9001"</span></code></pre>
+      </div>
+
+      <div class="env-card">
+        <div class="env-card-header">
+          apps/web/.env
+          <span>copy from "apps/web/.env example"</span>
+        </div>
+        <pre><code><span class="t-kw">NEXT_PUBLIC_API_URL</span>=<span class="t-str">"http://localhost:9000"</span>
+<span class="t-kw">NEXT_PUBLIC_API_BASE_URL</span>=<span class="t-str">"http://localhost:9000"</span></code></pre>
+      </div>
+
+      <div class="env-card">
+        <div class="env-card-header">
+          packages/database/.env
+          <span>Prisma CLI reads this directly</span>
+        </div>
+        <pre><code><span class="t-cmt"># Must match DATABASE_URL in apps/api/.env</span>
+<span class="t-kw">DATABASE_URL</span>=<span class="t-str">"postgresql://postgres:ShipFlow@DB#2026@localhost:5432/ship_flow_dev?schema=public"</span></code></pre>
+      </div>
+
+      <div class="env-card">
+        <div class="env-card-header">
+          packages/api-tests/.env.test
+          <span>Integration test credentials</span>
+        </div>
+        <pre><code><span class="t-kw">API_BASE_URL</span>=<span class="t-str">http://localhost:9000</span>
+<span class="t-kw">TEST_EMAIL</span>=<span class="t-str">test+org@shipflow.dev</span>
+<span class="t-kw">TEST_PASSWORD</span>=<span class="t-str">Test@1234</span></code></pre>
+      </div>
+
+    </div>
+
+    <div class="callout info">
+      <div>ℹ️ <strong>DATABASE_URL must be identical</strong> in <code>apps/api/.env</code> and <code>packages/database/.env</code>. The API uses it at runtime; Prisma CLI uses it during migrations.</div>
+    </div>
+  </section>
+
+  <!-- ── First-Time Setup ── -->
+  <section id="first-time">
+    <h2><span class="icon">🚀</span> First-Time Setup</h2>
+    <p>Run these once after cloning the repo, in order.</p>
+
+    <ul class="steps">
+      <li>
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Install all dependencies</strong>
+          <span>pnpm workspaces installs everything for all packages at once.</span>
+        </div>
+      </li>
+    </ul>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>pnpm install</code></pre>
+
+    <ul class="steps">
+      <li>
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Build shared packages</strong>
+          <span>Apps import compiled types — build database and shared first.</span>
+        </div>
+      </li>
+    </ul>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>pnpm --filter @shipflow/database build
+pnpm --filter @shipflow/shared build</code></pre>
+
+    <ul class="steps">
+      <li>
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Run the initial migration</strong>
+          <span>Creates all database tables and generates the Prisma client.</span>
+        </div>
+      </li>
+    </ul>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>pnpm db:migrate:dev</code></pre>
+
+    <ul class="steps">
+      <li>
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <strong>Generate Prisma client</strong>
+          <span>Only needed if migrate:dev wasn't run or client is stale.</span>
+        </div>
+      </li>
+    </ul>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>pnpm db:generate</code></pre>
+
+    <ul class="steps">
+      <li>
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <strong>(Optional) Seed the database</strong>
+          <span>Inserts initial test data via packages/database/src/seed.ts.</span>
+        </div>
+      </li>
+    </ul>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>pnpm db:seed</code></pre>
+  </section>
+
+  <!-- ── Database ── -->
+  <section id="database">
+    <h2><span class="icon">🗄️</span> Database Scripts — Order Matters</h2>
+    <p>All root-level <code>db:*</code> scripts delegate to <code>packages/database</code>.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Root Script</th>
+            <th>What it does</th>
+            <th>When to run</th>
+            <th>Env</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>pnpm db:migrate:dev</td>
+            <td>Creates a new migration file from schema diff + applies it + regenerates Prisma client</td>
+            <td>After every change to <code>schema.prisma</code></td>
+            <td><span class="badge badge-green">Dev only</span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>pnpm db:generate</td>
+            <td>Regenerates Prisma client from current schema — does NOT touch the DB</td>
+            <td>After pulling a branch with new migrations but no new schema changes</td>
+            <td><span class="badge badge-green">Dev</span></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>pnpm db:seed</td>
+            <td>Runs <code>src/seed.ts</code> — inserts test data</td>
+            <td>After a fresh migration when you need data</td>
+            <td><span class="badge badge-green">Dev</span></td>
+          </tr>
+          <tr>
+            <td>—</td>
+            <td>pnpm db:studio</td>
+            <td>Opens Prisma Studio at <code>localhost:5555</code></td>
+            <td>Any time — visual DB browser</td>
+            <td><span class="badge badge-blue">Any</span></td>
+          </tr>
+          <tr>
+            <td>—</td>
+            <td>pnpm db:migrate:deploy</td>
+            <td>Applies all pending migrations silently, no prompts, no new files</td>
+            <td>CI/CD pipeline before starting API. <strong>Never run locally against shared DB.</strong></td>
+            <td><span class="badge badge-red">Prod only</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Direct package commands (same as root shortcuts)</h3>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>pnpm --filter @shipflow/database prisma:migrate:dev     <span class="t-cmt"># = pnpm db:migrate:dev</span>
+pnpm --filter @shipflow/database prisma:generate        <span class="t-cmt"># = pnpm db:generate</span>
+pnpm --filter @shipflow/database prisma:migrate:deploy  <span class="t-cmt"># = pnpm db:migrate:deploy</span>
+pnpm --filter @shipflow/database prisma:seed            <span class="t-cmt"># = pnpm db:seed</span>
+pnpm --filter @shipflow/database prisma:studio          <span class="t-cmt"># = pnpm db:studio</span></code></pre>
+  </section>
+
+  <!-- ── Development ── -->
+  <section id="dev">
+    <h2><span class="icon">⚡</span> Daily Development Workflow</h2>
+
+    <h3>Option A — Start everything (Turborepo)</h3>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>pnpm dev</code></pre>
+    <p>Turbo starts <code>apps/api</code> and <code>apps/web</code> in parallel with hot-reload.</p>
+
+    <h3>Option B — Start services individually</h3>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code><span class="t-cmt"># Terminal 1 — API (port 9000)</span>
+pnpm dev:api
+
+<span class="t-cmt"># Terminal 2 — Web (port 9001)</span>
+pnpm dev:web</code></pre>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Service</th><th>Dev Command Inside Package</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>apps/api</td>
+            <td>nest start --watch</td>
+            <td>NestJS with hot-reload. Clears tsbuildinfo first to avoid stale incremental builds.</td>
+          </tr>
+          <tr>
+            <td>apps/web</td>
+            <td>next dev --port 9001</td>
+            <td>Next.js App Router with HMR on port 9001.</td>
+          </tr>
+          <tr>
+            <td>packages/database</td>
+            <td>tsc --watch</td>
+            <td>Recompiles DB types on change. Run only when editing the database package itself.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Debug mode (API)</h3>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>pnpm --filter @shipflow/api start:debug
+<span class="t-cmt"># Attach Node.js debugger to port 9229</span></code></pre>
+  </section>
+
+  <!-- ── Build ── -->
+  <section id="build">
+    <h2><span class="icon">🏗️</span> Build (Production Artifacts)</h2>
+
+    <h3>Full build (all packages, correct order)</h3>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>pnpm build</code></pre>
+    <p>Turbo resolves the dependency graph automatically:</p>
+    <pre><code><span class="t-cmt">@shipflow/database  ──┐
+                      ├──▶  @shipflow/api
+@shipflow/shared    ──┘──▶  @shipflow/web</span></code></pre>
+
+    <h3>Individual builds</h3>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>pnpm --filter @shipflow/database build   <span class="t-cmt"># prisma generate + tsc → dist/</span>
+pnpm --filter @shipflow/shared build     <span class="t-cmt"># tsc → dist/</span>
+pnpm --filter @shipflow/api build        <span class="t-cmt"># nest build → apps/api/dist/</span>
+pnpm --filter @shipflow/web build        <span class="t-cmt"># next build → apps/web/.next/</span></code></pre>
+  </section>
+
+  <!-- ── Production ── -->
+  <section id="production">
+    <h2><span class="icon">🌐</span> Running in Production</h2>
+
+    <div class="callout danger">
+      <div>🔴 <strong>Production deploy order:</strong> build → db:migrate:deploy → start. Never run <code>migrate:dev</code> in production.</div>
+    </div>
+
+    <h3>Step 1 — Set production env vars (apps/api)</h3>
+    <div class="env-card">
+      <div class="env-card-header">apps/api/.env (production values)</div>
+      <pre><code><span class="t-kw">NODE_ENV</span>=<span class="t-str">"production"</span>
+<span class="t-kw">PORT</span>=<span class="t-num">9000</span>
+<span class="t-kw">DATABASE_URL</span>=<span class="t-str">"postgresql://user:pass@host:5432/ship_flow_prod?schema=public"</span>
+<span class="t-kw">JWT_SECRET</span>=<span class="t-str">"&lt;openssl rand -base64 64&gt;"</span>
+<span class="t-kw">FRONTEND_URL</span>=<span class="t-str">"https://your-production-domain.com"</span></code></pre>
+    </div>
+
+    <h3>Step 2 — Build</h3>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>pnpm build</code></pre>
+
+    <h3>Step 3 — Apply pending migrations</h3>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>pnpm db:migrate:deploy</code></pre>
+
+    <h3>Step 4 — Start the API</h3>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>node apps/api/dist/main.js
+<span class="t-cmt"># or via package script:</span>
+pnpm --filter @shipflow/api start:prod</code></pre>
+
+    <h3>Step 5 — Start the Web</h3>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>pnpm --filter @shipflow/web start
+<span class="t-cmt"># Serves the .next/ build — put behind a reverse proxy (nginx/Caddy) or deploy to Vercel</span></code></pre>
+  </section>
+
+  <!-- ── Testing ── -->
+  <section id="testing">
+    <h2><span class="icon">🧪</span> Testing</h2>
+
+    <h3>Unit tests — API (Jest)</h3>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>pnpm --filter @shipflow/api test          <span class="t-cmt"># run once</span>
+pnpm --filter @shipflow/api test:watch    <span class="t-cmt"># watch mode</span>
+pnpm --filter @shipflow/api test:cov      <span class="t-cmt"># with coverage</span>
+pnpm --filter @shipflow/api test:e2e      <span class="t-cmt"># end-to-end suite</span></code></pre>
+
+    <h3>Integration tests — @shipflow/api-tests (Vitest)</h3>
+    <div class="callout info">
+      <div>ℹ️ Requires the API server to be <strong>running on port 9000</strong> and <code>packages/api-tests/.env.test</code> configured.</div>
+    </div>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>pnpm --filter @shipflow/api-tests test           <span class="t-cmt"># run once</span>
+pnpm --filter @shipflow/api-tests test:watch     <span class="t-cmt"># watch mode</span>
+pnpm --filter @shipflow/api-tests test:ui        <span class="t-cmt"># Vitest browser UI</span>
+pnpm --filter @shipflow/api-tests test:coverage  <span class="t-cmt"># coverage report</span></code></pre>
+
+    <h3>Full test suite (Turborepo)</h3>
+    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>pnpm test</code></pre>
+  </section>
+
+  <!-- ── Code Quality ── -->
+  <section id="quality">
+    <h2><span class="icon">🔍</span> Code Quality</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Script</th><th>What it runs</th></tr></thead>
+        <tbody>
+          <tr><td>pnpm lint</td><td>ESLint across all packages via Turbo</td></tr>
+          <tr><td>pnpm type-check</td><td>TypeScript compiler check across all packages</td></tr>
+          <tr><td>pnpm format</td><td>Prettier formats .ts, .tsx, .js, .json, .md</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Husky pre-commit hooks run ESLint + Prettier automatically on staged files via lint-staged. Never skip with <code>--no-verify</code>.</p>
+  </section>
+
+  <!-- ── Quick Reference ── -->
+  <section id="quickref">
+    <h2><span class="icon">⚡</span> Quick Reference</h2>
+    <div class="quick-ref">
+      <h3>Most Common Commands</h3>
+      <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code><span class="t-cmt"># ── First time ───────────────────────────────────────────</span>
+pnpm install && pnpm db:migrate:dev && pnpm db:seed
+
+<span class="t-cmt"># ── Every day ─────────────────────────────────────────────</span>
+pnpm dev                        <span class="t-cmt"># start API + Web</span>
+
+<span class="t-cmt"># ── After editing schema.prisma ───────────────────────────</span>
+pnpm db:migrate:dev             <span class="t-cmt"># create + apply migration, regenerate client</span>
+
+<span class="t-cmt"># ── After pulling branch with new migrations ──────────────</span>
+pnpm db:generate                <span class="t-cmt"># regenerate client only</span>
+
+<span class="t-cmt"># ── Before a PR ───────────────────────────────────────────</span>
+pnpm lint && pnpm type-check
+
+<span class="t-cmt"># ── Production deploy sequence ────────────────────────────</span>
+pnpm build
+pnpm db:migrate:deploy          <span class="t-cmt"># apply pending migrations (no prompts)</span>
+node apps/api/dist/main.js      <span class="t-cmt"># start API</span>
+pnpm --filter @shipflow/web start  <span class="t-cmt"># start Web</span></code></pre>
+    </div>
+  </section>
+
+  <footer>
+    ShipFlow — generated 2026-05-28 &nbsp;·&nbsp; NestJS API on :9000 &nbsp;·&nbsp; Next.js Web on :9001 &nbsp;·&nbsp; PostgreSQL
+  </footer>
+
+</div>
+
+<script>
+  function copyCode(btn) {
+    const code = btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code).then(() => {
+      const orig = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = orig, 1500);
+    });
+  }
+</script>
+</body>
+</html>

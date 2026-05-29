@@ -1,0 +1,27 @@
+{
+  "id": "job-work-type-form",
+  "fields": [
+    {
+      "id": "typeName",
+      "name": "name",
+      "type": "text",
+      "label": "Type Name",
+      "placeholder": "e.g., Printing, Embroidery, Dyeing",
+      "required": true,
+      "validation": {
+        "minLength": 1,
+        "customMessage": "Name is required"
+      }
+    },
+    {
+      "id": "description",
+      "name": "description",
+      "type": "textarea",
+      "label": "Description",
+      "placeholder": "Brief description of this job work type",
+      "rows": 3,
+      "resize": "none",
+      "required": false
+    }
+  ]
+}

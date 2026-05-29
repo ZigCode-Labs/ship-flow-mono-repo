@@ -1,0 +1,55 @@
+{
+  "id": "basic-form",
+  "title": "Basic Information Form",
+  "description": "A simple form with basic input fields",
+  "fields": [
+    {
+      "id": "name",
+      "name": "name",
+      "type": "text",
+      "label": "Full Name",
+      "placeholder": "Enter your full name",
+      "required": true,
+      "validation": {
+        "minLength": 2,
+        "maxLength": 50
+      }
+    },
+    {
+      "id": "email",
+      "name": "email",
+      "type": "email",
+      "label": "Email Address",
+      "placeholder": "john@example.com",
+      "required": true,
+      "validation": {
+        "pattern": "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$",
+        "customMessage": "Please enter a valid email address"
+      }
+    },
+    {
+      "id": "phone",
+      "name": "phone",
+      "type": "tel",
+      "label": "Phone Number",
+      "placeholder": "+1 (555) 000-0000",
+      "required": false
+    },
+    {
+      "id": "age",
+      "name": "age",
+      "type": "number",
+      "label": "Age",
+      "placeholder": "Enter your age",
+      "required": true,
+      "validation": {
+        "min": 18,
+        "max": 120
+      }
+    }
+  ],
+  "submitButton": {
+    "text": "Submit",
+    "variant": "default"
+  }
+}

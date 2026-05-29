@@ -1,0 +1,303 @@
+{
+  "sections": [
+    {
+      "id": "invoice_details",
+      "title": "Invoice Details",
+      "icon": "invoice",
+      "layout": "grid-3",
+      "fields": [
+        {
+          "id": "invoice_number",
+          "label": "Invoice Number",
+          "type": "text",
+          "placeholder": "DI-26-27-001",
+          "required": true,
+          "autoGenerate": true
+        },
+        {
+          "id": "invoice_date",
+          "label": "Invoice Date",
+          "type": "date",
+          "required": true,
+          "defaultToday": true
+        },
+        {
+          "id": "due_date",
+          "label": "Due Date",
+          "type": "date",
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "exchange_rate",
+      "title": "USD to INR Exchange Rate",
+      "icon": "refresh",
+      "layout": "inline",
+      "fields": [
+        {
+          "id": "usd_inr_rate",
+          "label": "1 USD =",
+          "type": "number",
+          "suffix": "INR",
+          "readOnly": false,
+          "defaultValue": 93.06
+        },
+        {
+          "id": "live_rate_toggle",
+          "label": "Live",
+          "type": "toggle",
+          "defaultValue": true
+        }
+      ],
+      "note": "Item catalog prices are stored in USD. When you add items, they will be converted to INR using this rate.",
+      "actions": [
+        {
+          "id": "refresh_rate",
+          "label": "Refresh",
+          "icon": "refresh",
+          "type": "button",
+          "apiSource": "frankfurter"
+        }
+      ]
+    },
+    {
+      "id": "seller_details",
+      "title": "Seller Details",
+      "icon": "invoice",
+      "layout": "grid-3",
+      "fields": [
+        {
+          "id": "company_name",
+          "label": "Company Name",
+          "type": "text",
+          "readOnly": true,
+          "sourceFrom": "sellerProfile.companyName"
+        },
+        {
+          "id": "gstin",
+          "label": "GSTIN",
+          "type": "text",
+          "readOnly": true,
+          "sourceFrom": "sellerProfile.gstin"
+        },
+        {
+          "id": "state",
+          "label": "State",
+          "type": "text",
+          "readOnly": true,
+          "sourceFrom": "sellerProfile.state"
+        }
+      ]
+    },
+    {
+      "id": "customer_details",
+      "title": "Customer Details",
+      "layout": "grid-1",
+      "fields": [
+        {
+          "id": "select_customer",
+          "label": "Select Customer",
+          "type": "select",
+          "placeholder": "Select a domestic buyer",
+          "dataSource": "domesticBuyers",
+          "required": true
+        },
+        {
+          "id": "customer_name",
+          "label": "Customer Name",
+          "type": "text",
+          "placeholder": "",
+          "autoFillFrom": "select_customer.name"
+        },
+        {
+          "id": "customer_gstin",
+          "label": "Customer GSTIN",
+          "type": "text",
+          "placeholder": "e.g., 27AABC U9608R1ZM",
+          "autoFillFrom": "select_customer.gstin"
+        },
+        {
+          "id": "place_of_supply",
+          "label": "Place of Supply",
+          "type": "select",
+          "placeholder": "Select state",
+          "dataSource": "indianStates"
+        }
+      ]
+    },
+    {
+      "id": "bank_details",
+      "title": "Bank Details",
+      "icon": "bank",
+      "layout": "grid-4",
+      "fields": [
+        {
+          "id": "bank_name",
+          "label": "Bank Name",
+          "type": "text",
+          "placeholder": ""
+        },
+        {
+          "id": "account_number",
+          "label": "Account Number",
+          "type": "text",
+          "placeholder": ""
+        },
+        {
+          "id": "ifsc_code",
+          "label": "IFSC Code",
+          "type": "text",
+          "placeholder": ""
+        },
+        {
+          "id": "branch",
+          "label": "Branch",
+          "type": "text",
+          "placeholder": ""
+        }
+      ]
+    },
+    {
+      "id": "line_items",
+      "title": "Line Items",
+      "layout": "table",
+      "columns": [
+        { "id": "item_code", "label": "Item Code" },
+        { "id": "description", "label": "Description" },
+        { "id": "hsn", "label": "HSN" },
+        { "id": "qty", "label": "Qty", "type": "number" },
+        { "id": "rate", "label": "Rate (₹)", "type": "number" },
+        { "id": "amount", "label": "Amount", "computed": true },
+        { "id": "gst", "label": "GST", "type": "select", "dataSource": "gstRates" },
+        { "id": "total", "label": "Total", "computed": true }
+      ],
+      "actions": [
+        {
+          "id": "add_item",
+          "label": "Add Item",
+          "icon": "plus",
+          "type": "button"
+        }
+      ],
+      "emptyState": "No items added. Click \"Add Item\" to add line items, or select from your Item Register."
+    },
+    {
+      "id": "totals",
+      "title": "",
+      "layout": "totals",
+      "fields": [
+        { "id": "subtotal", "label": "Subtotal:", "computed": true },
+        {
+          "id": "discount",
+          "label": "Discount:",
+          "type": "number",
+          "suffix": "₹",
+          "defaultValue": 0
+        },
+        { "id": "taxable_amount", "label": "Taxable Amount:", "computed": true },
+        { "id": "igst", "label": "IGST:", "computed": true },
+        { "id": "total_tax", "label": "Total Tax:", "computed": true },
+        { "id": "grand_total", "label": "Grand Total:", "computed": true, "highlight": true }
+      ]
+    },
+    {
+      "id": "terms_notes",
+      "title": "Terms & Notes",
+      "layout": "grid-2",
+      "fields": [
+        {
+          "id": "payment_terms",
+          "label": "Payment Terms",
+          "type": "text",
+          "placeholder": "e.g., Net 30 days"
+        },
+        {
+          "id": "reference",
+          "label": "Reference",
+          "type": "text",
+          "placeholder": "e.g., PO number"
+        },
+        {
+          "id": "notes",
+          "label": "Notes",
+          "type": "textarea",
+          "placeholder": "Additional notes for the customer...",
+          "fullWidth": true
+        }
+      ]
+    }
+  ],
+  "dataSources": {
+    "domesticBuyers": [
+      {
+        "value": "customer1",
+        "label": "ABC Corporation",
+        "name": "ABC Corporation",
+        "gstin": "27AABCU9603R1ZM"
+      },
+      {
+        "value": "customer2",
+        "label": "XYZ Industries",
+        "name": "XYZ Industries",
+        "gstin": "24GSPPK1234A1ZL"
+      },
+      {
+        "value": "customer3",
+        "label": "PQR Enterprises",
+        "name": "PQR Enterprises",
+        "gstin": "29AADCP1234C1ZV"
+      }
+    ],
+    "indianStates": [
+      { "value": "AN", "label": "Andaman and Nicobar Islands" },
+      { "value": "AP", "label": "Andhra Pradesh" },
+      { "value": "AR", "label": "Arunachal Pradesh" },
+      { "value": "AS", "label": "Assam" },
+      { "value": "BR", "label": "Bihar" },
+      { "value": "CH", "label": "Chandigarh" },
+      { "value": "CT", "label": "Chhattisgarh" },
+      { "value": "DN", "label": "Dadra and Nagar Haveli" },
+      { "value": "DD", "label": "Daman and Diu" },
+      { "value": "DL", "label": "Delhi" },
+      { "value": "GA", "label": "Goa" },
+      { "value": "GJ", "label": "Gujarat" },
+      { "value": "HR", "label": "Haryana" },
+      { "value": "HP", "label": "Himachal Pradesh" },
+      { "value": "JK", "label": "Jammu and Kashmir" },
+      { "value": "JH", "label": "Jharkhand" },
+      { "value": "KA", "label": "Karnataka" },
+      { "value": "KL", "label": "Kerala" },
+      { "value": "LD", "label": "Lakshadweep" },
+      { "value": "MP", "label": "Madhya Pradesh" },
+      { "value": "MH", "label": "Maharashtra" },
+      { "value": "MN", "label": "Manipur" },
+      { "value": "ML", "label": "Meghalaya" },
+      { "value": "MZ", "label": "Mizoram" },
+      { "value": "NL", "label": "Nagaland" },
+      { "value": "OD", "label": "Odisha" },
+      { "value": "PY", "label": "Puducherry" },
+      { "value": "PB", "label": "Punjab" },
+      { "value": "RJ", "label": "Rajasthan" },
+      { "value": "SK", "label": "Sikkim" },
+      { "value": "TN", "label": "Tamil Nadu" },
+      { "value": "TG", "label": "Telangana" },
+      { "value": "TR", "label": "Tripura" },
+      { "value": "UP", "label": "Uttar Pradesh" },
+      { "value": "UT", "label": "Uttarakhand" },
+      { "value": "WB", "label": "West Bengal" }
+    ],
+    "gstRates": [
+      { "value": "0", "label": "0%" },
+      { "value": "5", "label": "5%" },
+      { "value": "12", "label": "12%" },
+      { "value": "18", "label": "18%" },
+      { "value": "28", "label": "28%" }
+    ]
+  },
+  "sellerProfile": {
+    "companyName": "Sharma Traders Pvt. Ltd.",
+    "gstin": "27AABCT1234F1Z5",
+    "state": ""
+  }
+}

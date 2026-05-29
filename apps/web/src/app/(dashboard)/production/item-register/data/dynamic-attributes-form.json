@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "name": "key",
+      "label": "Key",
+      "type": "text",
+      "placeholder": "Key (e.g. Grade)",
+      "required": true,
+      "validation": {
+        "minLength": 1,
+        "maxLength": 50,
+        "customMessage": "Key is required"
+      }
+    },
+    {
+      "name": "value",
+      "label": "Value",
+      "type": "text",
+      "placeholder": "Value (e.g. A+)",
+      "required": true,
+      "validation": {
+        "minLength": 1,
+        "maxLength": 100,
+        "customMessage": "Value is required"
+      }
+    }
+  ]
+}

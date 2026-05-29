@@ -1,0 +1,208 @@
+{
+  "id": "all-fields-form",
+  "title": "Complete Form Demo",
+  "description": "Demonstration of all available field types",
+  "fields": [
+    {
+      "id": "fullName",
+      "name": "fullName",
+      "type": "text",
+      "label": "Full Name",
+      "placeholder": "John Doe",
+      "required": true
+    },
+    {
+      "id": "email",
+      "name": "email",
+      "type": "email",
+      "label": "Email",
+      "placeholder": "john@example.com",
+      "required": true
+    },
+    {
+      "id": "website",
+      "name": "website",
+      "type": "url",
+      "label": "Website",
+      "placeholder": "https://example.com",
+      "required": false
+    },
+    {
+      "id": "age",
+      "name": "age",
+      "type": "number",
+      "label": "Age",
+      "placeholder": "25",
+      "required": true,
+      "validation": {
+        "min": 18,
+        "max": 100
+      }
+    },
+    {
+      "id": "birthDate",
+      "name": "birthDate",
+      "type": "date",
+      "label": "Birth Date",
+      "required": true
+    },
+    {
+      "id": "appointmentTime",
+      "name": "appointmentTime",
+      "type": "time",
+      "label": "Appointment Time",
+      "required": false
+    },
+    {
+      "id": "meetingDateTime",
+      "name": "meetingDateTime",
+      "type": "datetime-local",
+      "label": "Meeting Date & Time",
+      "required": false
+    },
+    {
+      "id": "department",
+      "name": "department",
+      "type": "select",
+      "label": "Department",
+      "placeholder": "Select department",
+      "required": true,
+      "options": [
+        {
+          "label": "Engineering",
+          "value": "engineering"
+        },
+        {
+          "label": "Design",
+          "value": "design"
+        },
+        {
+          "label": "Marketing",
+          "value": "marketing"
+        },
+        {
+          "label": "Sales",
+          "value": "sales"
+        },
+        {
+          "label": "Human Resources",
+          "value": "hr"
+        }
+      ]
+    },
+    {
+      "id": "skills",
+      "name": "skills",
+      "type": "checkbox",
+      "label": "Skills",
+      "required": false,
+      "options": [
+        {
+          "label": "JavaScript",
+          "value": "javascript"
+        },
+        {
+          "label": "TypeScript",
+          "value": "typescript"
+        },
+        {
+          "label": "Python",
+          "value": "python"
+        },
+        {
+          "label": "React",
+          "value": "react"
+        },
+        {
+          "label": "Node.js",
+          "value": "nodejs"
+        }
+      ],
+      "inline": true
+    },
+    {
+      "id": "experienceLevel",
+      "name": "experienceLevel",
+      "type": "radio",
+      "label": "Experience Level",
+      "required": true,
+      "options": [
+        {
+          "label": "Junior (0-2 years)",
+          "value": "junior"
+        },
+        {
+          "label": "Mid (3-5 years)",
+          "value": "mid"
+        },
+        {
+          "label": "Senior (6-10 years)",
+          "value": "senior"
+        },
+        {
+          "label": "Lead (10+ years)",
+          "value": "lead"
+        }
+      ]
+    },
+    {
+      "id": "availability",
+      "name": "availability",
+      "type": "range",
+      "label": "Weekly Availability (hours)",
+      "description": "How many hours can you work per week?",
+      "required": true,
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "showValue": true,
+      "defaultValue": 30
+    },
+    {
+      "id": "completionProgress",
+      "name": "completionProgress",
+      "type": "progress",
+      "label": "Profile Completion",
+      "description": "Your profile is this complete",
+      "required": false,
+      "defaultValue": 65,
+      "max": 100,
+      "showValue": true,
+      "color": "success"
+    },
+    {
+      "id": "bio",
+      "name": "bio",
+      "type": "textarea",
+      "label": "Bio",
+      "placeholder": "Tell us about yourself...",
+      "required": false,
+      "rows": 5,
+      "resize": "vertical",
+      "validation": {
+        "maxLength": 500
+      }
+    },
+    {
+      "id": "newsletter",
+      "name": "newsletter",
+      "type": "checkbox",
+      "label": "Subscribe to newsletter",
+      "required": false,
+      "defaultValue": false
+    },
+    {
+      "id": "terms",
+      "name": "terms",
+      "type": "checkbox",
+      "label": "I agree to the terms and conditions",
+      "required": true,
+      "defaultValue": false
+    }
+  ],
+  "submitButton": {
+    "text": "Submit Application",
+    "variant": "default",
+    "size": "lg"
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "sections": [
+    {
+      "id": "job_work_details",
+      "title": "Job Work Details",
+      "icon": "wrench",
+      "fields": [
+        {
+          "id": "jobWorkNumber",
+          "name": "jobWorkNumber",
+          "label": "Job Work Number",
+          "type": "text",
+          "placeholder": "JW-00001",
+          "required": true,
+          "readOnly": true,
+          "autoGenerate": true
+        },
+        {
+          "id": "jobWorkType",
+          "name": "jobWorkType",
+          "label": "Job Work Type",
+          "type": "select",
+          "placeholder": "Select type",
+          "required": true,
+          "dataSource": "jobWorkTypes"
+        },
+        {
+          "id": "issueDate",
+          "name": "issueDate",
+          "label": "Issue Date",
+          "type": "date",
+          "required": true,
+          "defaultToday": true
+        },
+        {
+          "id": "expectedReturnDate",
+          "name": "expectedReturnDate",
+          "label": "Expected Return Date",
+          "type": "date",
+          "placeholder": "mm/dd/yyyy",
+          "required": false
+        },
+        {
+          "id": "jobWorker",
+          "name": "jobWorker",
+          "label": "Job Worker",
+          "type": "select",
+          "placeholder": "Select job worker",
+          "required": true,
+          "dataSource": "jobWorkers"
+        },
+        {
+          "id": "issueTime",
+          "name": "issueTime",
+          "label": "Issue Time",
+          "type": "time",
+          "placeholder": "--:-- --",
+          "required": false
+        },
+        {
+          "id": "jobWorkerAddress",
+          "name": "jobWorkerAddress",
+          "label": "Job Worker Address",
+          "type": "textarea",
+          "placeholder": "Enter job worker address",
+          "span": 2
+        },
+        {
+          "id": "remarks",
+          "name": "remarks",
+          "label": "Remarks",
+          "type": "textarea",
+          "placeholder": "Additional remarks...",
+          "span": 2
+        }
+      ]
+    }
+  ],
+  "dataSources": {
+    "jobWorkTypes": [
+      { "value": "manufacturing", "label": "Manufacturing" },
+      { "value": "assembly", "label": "Assembly" },
+      { "value": "fabrication", "label": "Fabrication" },
+      { "value": "repair", "label": "Repair" },
+      { "value": "finishing", "label": "Finishing" },
+      { "value": "testing", "label": "Testing" }
+    ],
+    "jobWorkers": [
+      {
+        "value": "worker1",
+        "label": "ABC Manufacturing Co",
+        "address": "123 Industrial Area, Mumbai, Maharashtra - 400001"
+      },
+      {
+        "value": "worker2",
+        "label": "XYZ Fabrication Unit",
+        "address": "456 Factory Road, Ahmedabad, Gujarat - 380001"
+      },
+      {
+        "value": "worker3",
+        "label": "PQR Assembly Services",
+        "address": "789 Commerce Street, Bangalore, Karnataka - 560001"
+      }
+    ],
+    "issueItems": [
+      { "value": "fabric", "label": "Fabric" },
+      { "value": "trim", "label": "Trim" },
+      { "value": "packing", "label": "Packing" }
+    ],
+    "workOperations": [
+      { "value": "cutting", "label": "Cutting" },
+      { "value": "stitching", "label": "Stitching" },
+      { "value": "pressing", "label": "Pressing" },
+      { "value": "dyeing", "label": "Dyeing" },
+      { "value": "weaving", "label": "Weaving" },
+      { "value": "finishing", "label": "Finishing" }
+    ]
+  }
+}

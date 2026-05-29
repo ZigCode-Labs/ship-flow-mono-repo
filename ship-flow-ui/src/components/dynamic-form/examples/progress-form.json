@@ -1,0 +1,62 @@
+{
+  "id": "progress-form",
+  "title": "Project Progress",
+  "description": "Track project completion status",
+  "fields": [
+    {
+      "id": "projectName",
+      "name": "projectName",
+      "type": "text",
+      "label": "Project Name",
+      "placeholder": "Enter project name",
+      "required": true
+    },
+    {
+      "id": "startDate",
+      "name": "startDate",
+      "type": "date",
+      "label": "Start Date",
+      "required": true
+    },
+    {
+      "id": "completion",
+      "name": "completion",
+      "type": "progress",
+      "label": "Completion Status",
+      "description": "Overall project completion percentage",
+      "required": false,
+      "defaultValue": 45,
+      "max": 100,
+      "showValue": true,
+      "color": "default"
+    },
+    {
+      "id": "quality",
+      "name": "quality",
+      "type": "progress",
+      "label": "Quality Score",
+      "description": "Current quality assessment",
+      "required": false,
+      "defaultValue": 75,
+      "max": 100,
+      "showValue": true,
+      "color": "success"
+    },
+    {
+      "id": "budgetUsage",
+      "name": "budgetUsage",
+      "type": "progress",
+      "label": "Budget Usage",
+      "description": "Percentage of budget used",
+      "required": false,
+      "defaultValue": 60,
+      "max": 100,
+      "showValue": true,
+      "color": "warning"
+    }
+  ],
+  "submitButton": {
+    "text": "Update Progress",
+    "variant": "secondary"
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "formSections": [
+    {
+      "id": "domestic-proforma",
+      "title": "Domestic Proforma",
+      "description": "Define the number format for Domestic Proforma invoices",
+      "fields": {
+        "prefix": {
+          "label": "PREFIX",
+          "type": "text",
+          "value": "DPF",
+          "placeholder": "Enter prefix",
+          "validation": {
+            "required": true,
+            "maxLength": 10,
+            "pattern": "^[A-Z0-9]+$"
+          }
+        },
+        "digits": {
+          "label": "DIGITS (PADDING)",
+          "type": "number",
+          "value": 4,
+          "placeholder": "Enter number of digits",
+          "validation": {
+            "required": true,
+            "min": 1,
+            "max": 10
+          }
+        },
+        "startingNumber": {
+          "label": "STARTING NUMBER",
+          "type": "number",
+          "value": 1,
+          "placeholder": "Enter starting number",
+          "validation": {
+            "required": true,
+            "min": 1
+          }
+        }
+      },
+      "generatedFormat": "DPF-0001",
+      "formatTemplate": "{prefix}-{paddedNumber}"
+    },
+    {
+      "id": "credit-note",
+      "title": "Credit Note",
+      "description": "Define the number format for Credit Notes",
+      "fields": {
+        "prefix": {
+          "label": "PREFIX",
+          "type": "text",
+          "value": "CN",
+          "placeholder": "Enter prefix",
+          "validation": {
+            "required": true,
+            "maxLength": 10,
+            "pattern": "^[A-Z0-9]+$"
+          }
+        },
+        "digits": {
+          "label": "DIGITS (PADDING)",
+          "type": "number",
+          "value": 4,
+          "placeholder": "Enter number of digits",
+          "validation": {
+            "required": true,
+            "min": 1,
+            "max": 10
+          }
+        },
+        "startingNumber": {
+          "label": "STARTING NUMBER",
+          "type": "number",
+          "value": 1,
+          "placeholder": "Enter starting number",
+          "validation": {
+            "required": true,
+            "min": 1
+          }
+        }
+      },
+      "generatedFormat": "CN-0001",
+      "formatTemplate": "{prefix}-{paddedNumber}"
+    },
+    {
+      "id": "delivery-challan",
+      "title": "Delivery Challan",
+      "description": "Define the number format for Delivery Challans",
+      "fields": {
+        "prefix": {
+          "label": "PREFIX",
+          "type": "text",
+          "value": "DC",
+          "placeholder": "Enter prefix",
+          "validation": {
+            "required": true,
+            "maxLength": 10,
+            "pattern": "^[A-Z0-9]+$"
+          }
+        },
+        "digits": {
+          "label": "DIGITS (PADDING)",
+          "type": "number",
+          "value": 4,
+          "placeholder": "Enter number of digits",
+          "validation": {
+            "required": true,
+            "min": 1,
+            "max": 10
+          }
+        },
+        "startingNumber": {
+          "label": "STARTING NUMBER",
+          "type": "number",
+          "value": 1,
+          "placeholder": "Enter starting number",
+          "validation": {
+            "required": true,
+            "min": 1
+          }
+        }
+      },
+      "generatedFormat": "DC-0001",
+      "formatTemplate": "{prefix}-{paddedNumber}"
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "lastUpdated": "2026-04-13",
+    "description": "Configuration for document number formatting with dynamic input fields"
+  }
+}

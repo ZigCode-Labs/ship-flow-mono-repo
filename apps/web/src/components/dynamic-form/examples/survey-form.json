@@ -1,0 +1,94 @@
+{
+  "id": "survey-form",
+  "title": "Customer Survey",
+  "description": "Help us improve our services",
+  "fields": [
+    {
+      "id": "satisfaction",
+      "name": "satisfaction",
+      "type": "radio",
+      "label": "How satisfied are you with our service?",
+      "required": true,
+      "options": [
+        {
+          "label": "Very Satisfied",
+          "value": "very_satisfied"
+        },
+        {
+          "label": "Satisfied",
+          "value": "satisfied"
+        },
+        {
+          "label": "Neutral",
+          "value": "neutral"
+        },
+        {
+          "label": "Dissatisfied",
+          "value": "dissatisfied"
+        },
+        {
+          "label": "Very Dissatisfied",
+          "value": "very_dissatisfied"
+        }
+      ],
+      "inline": false
+    },
+    {
+      "id": "features",
+      "name": "features",
+      "type": "checkbox",
+      "label": "Which features do you use the most?",
+      "required": false,
+      "options": [
+        {
+          "label": "Dashboard",
+          "value": "dashboard"
+        },
+        {
+          "label": "Reports",
+          "value": "reports"
+        },
+        {
+          "label": "Analytics",
+          "value": "analytics"
+        },
+        {
+          "label": "Settings",
+          "value": "settings"
+        },
+        {
+          "label": "Integrations",
+          "value": "integrations"
+        }
+      ],
+      "inline": true
+    },
+    {
+      "id": "feedback",
+      "name": "feedback",
+      "type": "textarea",
+      "label": "Additional Feedback",
+      "placeholder": "Tell us more about your experience...",
+      "required": false,
+      "rows": 4,
+      "resize": "vertical"
+    },
+    {
+      "id": "recommendation",
+      "name": "recommendation",
+      "type": "range",
+      "label": "How likely are you to recommend us?",
+      "description": "0 = Not at all likely, 10 = Extremely likely",
+      "required": true,
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "showValue": true,
+      "defaultValue": 7
+    }
+  ],
+  "submitButton": {
+    "text": "Submit Survey",
+    "variant": "outline"
+  }
+}

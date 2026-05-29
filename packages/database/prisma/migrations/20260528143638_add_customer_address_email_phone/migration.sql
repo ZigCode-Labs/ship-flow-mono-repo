@@ -1,0 +1,3 @@
+-- This migration was superseded by the init migration which already includes
+-- address, email, and phone fields on domestic_buyers.
+-- No-op migration to satisfy Prisma migration tracking.

@@ -1,0 +1,129 @@
+{
+  "title": "Add New Job Worker",
+  "description": "Add a new job worker to your contacts",
+  "uploadAction": {
+    "buttonText": "Upload Business Card",
+    "helperText": "Quickly fill job worker details from a business card image"
+  },
+  "fields": [
+    {
+      "name": "contactName",
+      "label": "Contact Name",
+      "type": "text",
+      "required": true,
+      "placeholder": "John Doe",
+      "layout": "half"
+    },
+    {
+      "name": "companyName",
+      "label": "Company Name",
+      "type": "text",
+      "required": false,
+      "placeholder": "Optional",
+      "layout": "half"
+    },
+    {
+      "name": "phone",
+      "label": "Phone",
+      "type": "phone",
+      "required": true,
+      "placeholder": "9099887776",
+      "layout": "full"
+    },
+    {
+      "name": "country",
+      "label": "Country",
+      "type": "select",
+      "required": true,
+      "placeholder": "Select country",
+      "layout": "full",
+      "options": [{ "value": "India", "label": "India" }]
+    },
+    {
+      "name": "pincode",
+      "label": "PIN Code",
+      "type": "text",
+      "required": true,
+      "placeholder": "400001",
+      "layout": "full",
+      "maxLength": 6
+    },
+    {
+      "name": "city",
+      "label": "City",
+      "type": "text",
+      "required": true,
+      "placeholder": "Auto-filled from PIN",
+      "layout": "half"
+    },
+    {
+      "name": "state",
+      "label": "State",
+      "type": "select",
+      "required": true,
+      "placeholder": "Auto-filled from PIN",
+      "layout": "half",
+      "optionsSource": "indianStates"
+    },
+    {
+      "name": "address",
+      "label": "Address",
+      "type": "text",
+      "required": false,
+      "placeholder": "Street address, building, etc.",
+      "layout": "full"
+    },
+    {
+      "name": "contactPerson",
+      "label": "Contact Person",
+      "type": "text",
+      "required": false,
+      "placeholder": "Contact name",
+      "layout": "half"
+    },
+    {
+      "name": "designation",
+      "label": "Designation",
+      "type": "text",
+      "required": false,
+      "placeholder": "Position",
+      "layout": "half"
+    },
+    {
+      "name": "gstin",
+      "label": "GSTIN",
+      "type": "text",
+      "required": false,
+      "placeholder": "E.G., 27AABCU9603R1ZM",
+      "layout": "full",
+      "maxLength": 15
+    },
+    {
+      "name": "email",
+      "label": "Email",
+      "type": "email",
+      "required": false,
+      "placeholder": "worker@example.com (optional)",
+      "layout": "full"
+    },
+    {
+      "name": "contactType",
+      "label": "Contact Type",
+      "type": "locked",
+      "required": false,
+      "placeholder": "",
+      "layout": "full",
+      "lockedValue": "Job Worker",
+      "helperText": "Contact type is locked to Job worker"
+    },
+    {
+      "name": "notes",
+      "label": "Notes",
+      "type": "textarea",
+      "required": false,
+      "placeholder": "Additional notes, specializations, etc.",
+      "layout": "full",
+      "rows": 3
+    }
+  ]
+}

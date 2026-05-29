@@ -1,0 +1,74 @@
+{
+  "id": "registration-form",
+  "title": "User Registration",
+  "description": "Complete registration form with various field types",
+  "fields": [
+    {
+      "id": "username",
+      "name": "username",
+      "type": "text",
+      "label": "Username",
+      "placeholder": "Choose a username",
+      "required": true,
+      "validation": {
+        "minLength": 3,
+        "maxLength": 20,
+        "pattern": "^[a-zA-Z0-9_]+$",
+        "customMessage": "Username must be 3-20 characters and contain only letters, numbers, and underscores"
+      }
+    },
+    {
+      "id": "email",
+      "name": "email",
+      "type": "email",
+      "label": "Email Address",
+      "placeholder": "you@example.com",
+      "required": true
+    },
+    {
+      "id": "password",
+      "name": "password",
+      "type": "password",
+      "label": "Password",
+      "placeholder": "Create a password",
+      "required": true,
+      "validation": {
+        "minLength": 8
+      }
+    },
+    {
+      "id": "role",
+      "name": "role",
+      "type": "select",
+      "label": "Role",
+      "placeholder": "Select your role",
+      "required": true,
+      "options": [
+        {
+          "label": "Administrator",
+          "value": "admin"
+        },
+        {
+          "label": "Editor",
+          "value": "editor"
+        },
+        {
+          "label": "Viewer",
+          "value": "viewer"
+        }
+      ]
+    },
+    {
+      "id": "terms",
+      "name": "terms",
+      "type": "checkbox",
+      "label": "I agree to the Terms and Conditions",
+      "required": true,
+      "defaultValue": false
+    }
+  ],
+  "submitButton": {
+    "text": "Register",
+    "variant": "default"
+  }
+}

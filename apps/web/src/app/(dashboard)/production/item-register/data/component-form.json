@@ -1,0 +1,134 @@
+{
+  "id": "component-dimensions-form",
+  "title": "Component Details",
+  "fields": [
+    {
+      "id": "name",
+      "name": "name",
+      "type": "text",
+      "label": "Name",
+      "placeholder": "Component name",
+      "required": true,
+      "span": 1
+    },
+    {
+      "id": "quantity",
+      "name": "quantity",
+      "type": "number",
+      "label": "Qty",
+      "placeholder": "1",
+      "required": false,
+      "defaultValue": 1,
+      "span": 1
+    },
+    {
+      "id": "shape",
+      "name": "shape",
+      "type": "select",
+      "label": "Shape",
+      "required": false,
+      "defaultValue": "box",
+      "span": 1,
+      "options": [
+        { "value": "box", "label": "Box (L x B x H)" },
+        { "value": "cylinder", "label": "Cylinder (R x H)" },
+        { "value": "sphere", "label": "Sphere (R)" },
+        { "value": "custom", "label": "Custom" }
+      ]
+    },
+    {
+      "id": "length",
+      "name": "length",
+      "type": "text",
+      "label": "Length",
+      "placeholder": "L",
+      "required": false,
+      "span": 1
+    },
+    {
+      "id": "breadth",
+      "name": "breadth",
+      "type": "text",
+      "label": "Breadth",
+      "placeholder": "B",
+      "required": false,
+      "span": 1
+    },
+    {
+      "id": "height",
+      "name": "height",
+      "type": "text",
+      "label": "Height",
+      "placeholder": "H",
+      "required": false,
+      "span": 1
+    },
+    {
+      "id": "material",
+      "name": "material",
+      "type": "text",
+      "label": "Material",
+      "placeholder": "e.g., Brass, Iron",
+      "required": false,
+      "span": 1
+    },
+    {
+      "id": "finish",
+      "name": "finish",
+      "type": "text",
+      "label": "Finish",
+      "placeholder": "e.g., Polished, Matte",
+      "required": false,
+      "span": 1
+    },
+    {
+      "id": "costPerUnit",
+      "name": "costPerUnit",
+      "type": "number",
+      "label": "Cost per unit",
+      "placeholder": "0.00",
+      "required": false,
+      "span": 1
+    },
+    {
+      "id": "isFragile",
+      "name": "isFragile",
+      "type": "checkbox",
+      "label": "Fragile",
+      "required": false,
+      "defaultValue": false,
+      "span": 1,
+      "inline": true
+    },
+    {
+      "id": "assemblyRequired",
+      "name": "assemblyRequired",
+      "type": "checkbox",
+      "label": "Assembly Required",
+      "required": false,
+      "defaultValue": false,
+      "span": 1,
+      "inline": true
+    },
+    {
+      "id": "notes",
+      "name": "notes",
+      "type": "textarea",
+      "label": "Notes",
+      "placeholder": "Component notes...",
+      "required": false,
+      "span": 1,
+      "rows": 1
+    },
+    {
+      "id": "customAttribute",
+      "name": "customAttribute",
+      "type": "textarea",
+      "label": "Custom Attribute",
+      "placeholder": "Optional custom field",
+      "required": false,
+      "span": 1,
+      "rows": 1
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "@shipflow/api-tests",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Integration tests for ShipFlow API endpoints",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^2.1.0",
+    "vitest": "^2.1.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.0"
+  }
+}

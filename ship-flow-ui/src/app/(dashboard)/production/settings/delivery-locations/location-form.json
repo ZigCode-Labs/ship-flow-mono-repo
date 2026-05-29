@@ -1,0 +1,32 @@
+{
+  "id": "delivery-location-form",
+  "title": "Add Delivery Location",
+  "fields": [
+    {
+      "id": "locationName",
+      "name": "locationName",
+      "type": "text",
+      "label": "Location Name",
+      "placeholder": "e.g., Main Warehouse, Factory Unit 2",
+      "required": true,
+      "validation": {
+        "minLength": 1,
+        "maxLength": 100,
+        "customMessage": "Location name is required"
+      }
+    },
+    {
+      "id": "description",
+      "name": "description",
+      "type": "textarea",
+      "label": "Description",
+      "placeholder": "Address or additional details",
+      "required": false,
+      "rows": 4
+    }
+  ],
+  "submitButton": {
+    "text": "Add Location",
+    "variant": "default"
+  }
+}

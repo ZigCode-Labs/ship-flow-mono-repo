@@ -1,0 +1,313 @@
+{
+  "deliveryChallans": [],
+  "formConfig": {
+    "sections": [
+      {
+        "id": "header",
+        "title": "HEADER",
+        "layout": "grid-3",
+        "fields": [
+          {
+            "id": "dc_number",
+            "label": "DC Number",
+            "type": "text",
+            "placeholder": "Auto-generated",
+            "autoGenerate": true,
+            "readOnly": true
+          },
+          {
+            "id": "dc_date",
+            "label": "DC Date",
+            "type": "date",
+            "required": true,
+            "defaultToday": true
+          },
+          {
+            "id": "delivery_type",
+            "label": "Delivery Type",
+            "type": "select",
+            "required": true,
+            "defaultValue": "supply_of_goods",
+            "dataSource": "deliveryTypes"
+          }
+        ]
+      },
+      {
+        "id": "from_company",
+        "title": "FROM (YOUR COMPANY)",
+        "layout": "grid-1",
+        "fields": [
+          {
+            "id": "company_name",
+            "label": "Company Name",
+            "type": "text",
+            "sourceFrom": "sellerProfile.companyName",
+            "readOnly": true,
+            "fullWidth": true
+          }
+        ]
+      },
+      {
+        "id": "to_buyer",
+        "title": "TO (BUYER)",
+        "layout": "grid-2",
+        "fields": [
+          {
+            "id": "select_buyer",
+            "label": "Select Buyer",
+            "type": "select",
+            "placeholder": "Search and select a buyer...",
+            "dataSource": "domesticBuyers",
+            "fullWidth": true
+          },
+          {
+            "id": "buyer_name",
+            "label": "Buyer Name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "id": "buyer_gstin",
+            "label": "GSTIN (optional)",
+            "type": "text"
+          },
+          {
+            "id": "buyer_address",
+            "label": "Address",
+            "type": "text"
+          },
+          {
+            "id": "buyer_state",
+            "label": "State",
+            "type": "text"
+          },
+          {
+            "id": "place_delivery",
+            "label": "Place of Delivery",
+            "type": "text",
+            "placeholder": "e.g. Delhi Warehouse",
+            "fullWidth": true
+          }
+        ]
+      },
+      {
+        "id": "transport",
+        "title": "TRANSPORT DETAILS (OPTIONAL)",
+        "layout": "grid-3",
+        "fields": [
+          {
+            "id": "transporter_name",
+            "label": "Transporter Name",
+            "type": "text"
+          },
+          {
+            "id": "vehicle_number",
+            "label": "Vehicle Number",
+            "type": "text",
+            "placeholder": "e.g. UP-32-AB-1234"
+          },
+          {
+            "id": "expected_delivery_date",
+            "label": "Expected Delivery Date",
+            "type": "date"
+          }
+        ]
+      },
+      {
+        "id": "linked_invoice",
+        "title": "LINKED INVOICE (OPTIONAL)",
+        "layout": "grid-1",
+        "note": "Optional reference link. Select an invoice to also copy its line items.",
+        "fields": [
+          {
+            "id": "linked_invoice_id",
+            "label": "Linked Invoice",
+            "type": "select",
+            "defaultValue": "none",
+            "dataSource": "invoices"
+          }
+        ]
+      },
+      {
+        "id": "items",
+        "title": "ITEMS",
+        "layout": "table",
+        "fields": [],
+        "columns": [
+          {
+            "id": "index",
+            "label": "#"
+          },
+          {
+            "id": "description",
+            "label": "Description"
+          },
+          {
+            "id": "itemCode",
+            "label": "Item Code"
+          },
+          {
+            "id": "hsn",
+            "label": "HSN"
+          },
+          {
+            "id": "quantity",
+            "label": "Qty"
+          },
+          {
+            "id": "unit",
+            "label": "Unit"
+          },
+          {
+            "id": "rate",
+            "label": "Rate"
+          },
+          {
+            "id": "amount",
+            "label": "Amount"
+          }
+        ],
+        "actions": [
+          {
+            "id": "add_row",
+            "label": "Add Row",
+            "icon": "plus",
+            "type": "button"
+          }
+        ]
+      },
+      {
+        "id": "summary",
+        "title": "SUMMARY",
+        "layout": "totals",
+        "fields": [
+          {
+            "id": "total_quantity",
+            "label": "Total Quantity",
+            "type": "number",
+            "computed": true
+          },
+          {
+            "id": "grand_total",
+            "label": "Grand Total",
+            "type": "number",
+            "computed": true,
+            "highlight": true
+          }
+        ]
+      },
+      {
+        "id": "notes",
+        "title": "NOTES (OPTIONAL)",
+        "layout": "grid-1",
+        "fields": [
+          {
+            "id": "notes",
+            "label": "Notes",
+            "type": "textarea",
+            "placeholder": "Handled with care, special instructions..."
+          }
+        ]
+      }
+    ],
+    "dataSources": {
+      "domesticBuyers": [
+        {
+          "value": "reliance-industries",
+          "label": "Reliance Industries Ltd",
+          "name": "Reliance Industries Ltd",
+          "gstin": "27AAACR5055K1Z3",
+          "address": "Navi Mumbai, Maharashtra",
+          "state": "MH",
+          "placeOfDelivery": "MH"
+        },
+        {
+          "value": "tata-consultancy",
+          "label": "Tata Consultancy Services",
+          "name": "Tata Consultancy Services",
+          "gstin": "27AAACT2727Q1ZW",
+          "address": "Mumbai, Maharashtra",
+          "state": "MH",
+          "placeOfDelivery": "MH"
+        },
+        {
+          "value": "infosys-ltd",
+          "label": "Infosys Limited",
+          "name": "Infosys Limited",
+          "gstin": "29AABCI1234A1Z5",
+          "address": "Bangalore, Karnataka",
+          "state": "KA",
+          "placeOfDelivery": "KA"
+        },
+        {
+          "value": "selected-buyer",
+          "label": "Select Buyer",
+          "name": "",
+          "gstin": "",
+          "address": "",
+          "state": "",
+          "placeOfDelivery": ""
+        }
+      ],
+      "indianStates": [
+        {
+          "value": "DL",
+          "label": "Delhi"
+        },
+        {
+          "value": "MH",
+          "label": "Maharashtra"
+        },
+        {
+          "value": "GJ",
+          "label": "Gujarat"
+        },
+        {
+          "value": "KA",
+          "label": "Karnataka"
+        }
+      ],
+      "gstRates": [
+        {
+          "value": "0",
+          "label": "0%"
+        }
+      ],
+      "deliveryTypes": [
+        {
+          "value": "supply_of_goods",
+          "label": "Supply of Goods"
+        },
+        {
+          "value": "others",
+          "label": "Others"
+        }
+      ],
+      "invoices": [
+        {
+          "value": "none",
+          "label": "-- None --"
+        }
+      ],
+      "units": [
+        {
+          "value": "PCS",
+          "label": "PCS"
+        },
+        {
+          "value": "BOX",
+          "label": "BOX"
+        },
+        {
+          "value": "KG",
+          "label": "KG"
+        }
+      ]
+    },
+    "sellerProfile": {
+      "companyName": "Sharma Traders Pvt. Ltd.",
+      "gstin": "",
+      "state": ""
+    }
+  }
+}

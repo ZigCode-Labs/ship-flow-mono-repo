@@ -1,0 +1,39 @@
+{
+  "name": "shipflow",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "dev:api": "pnpm --filter @shipflow/api dev",
+    "dev:web": "pnpm --filter @shipflow/web dev",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "type-check": "turbo type-check",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md}\"",
+    "prepare": "husky",
+    "db:migrate:dev": "pnpm --filter @shipflow/database prisma:migrate:dev",
+    "db:migrate:deploy": "pnpm --filter @shipflow/database prisma:migrate:deploy",
+    "db:generate": "pnpm --filter @shipflow/database prisma:generate",
+    "db:seed": "pnpm --filter @shipflow/database prisma:seed",
+    "db:studio": "pnpm --filter @shipflow/database prisma:studio"
+  },
+  "devDependencies": {
+    "turbo": "latest",
+    "prettier": "^3.4.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.3.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{js,json,md,yaml,yml}": [
+      "prettier --write"
+    ]
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20"
+  }
+}

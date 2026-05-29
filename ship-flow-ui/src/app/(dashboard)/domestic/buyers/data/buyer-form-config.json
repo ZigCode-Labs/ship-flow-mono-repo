@@ -1,0 +1,51 @@
+{
+  "sections": [
+    {
+      "title": "Company Details",
+      "fields": [
+        {
+          "name": "companyName",
+          "label": "Company Name",
+          "required": true,
+          "type": "text",
+          "span": 1
+        },
+        { "name": "tradeName", "label": "Trade Name", "type": "text", "span": 1 },
+        { "name": "gstin", "label": "GSTIN", "required": true, "type": "text", "span": 1 },
+        { "name": "pan", "label": "PAN Number", "type": "text", "span": 1 }
+      ]
+    },
+    {
+      "title": "Address",
+      "fields": [
+        { "name": "address", "label": "Address", "type": "textarea", "span": 2 },
+        { "name": "city", "label": "City", "type": "text", "span": 1 },
+        { "name": "state", "label": "State", "required": true, "type": "select", "span": 1 },
+        { "name": "pincode", "label": "Pincode", "type": "text", "span": 1 }
+      ]
+    },
+    {
+      "title": "Contact Details",
+      "fields": [
+        { "name": "contactPerson", "label": "Contact Person", "type": "text", "span": 1 },
+        { "name": "designation", "label": "Designation", "type": "text", "span": 1 },
+        { "name": "email", "label": "Email", "type": "email", "span": 1 },
+        { "name": "phone", "label": "Phone", "type": "text", "span": 1 },
+        { "name": "altPhone", "label": "Alternate Phone", "type": "text", "span": 1 }
+      ]
+    },
+    {
+      "title": "Bank Details (Optional)",
+      "fields": [
+        { "name": "bankName", "label": "Bank Name", "type": "text", "span": 1 },
+        { "name": "accountNumber", "label": "Account Number", "type": "text", "span": 1 },
+        { "name": "ifsc", "label": "IFSC Code", "type": "text", "span": 1 },
+        { "name": "branch", "label": "Branch", "type": "text", "span": 1 }
+      ]
+    },
+    {
+      "title": "Notes",
+      "fields": [{ "name": "notes", "label": "Notes", "type": "textarea", "span": 2 }]
+    }
+  ]
+}

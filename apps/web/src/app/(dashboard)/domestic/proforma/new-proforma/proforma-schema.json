@@ -1,0 +1,278 @@
+{
+  "component": "page",
+  "props": {
+    "className": "proforma-page"
+  },
+  "children": [
+    {
+      "component": "card",
+      "props": {
+        "title": "Proforma Details"
+      },
+      "children": [
+        {
+          "component": "input",
+          "props": {
+            "label": "Proforma Number",
+            "name": "proformaNumber",
+            "type": "text",
+            "value": "",
+            "validation": "z.string().min(1, 'Required')"
+          }
+        },
+        {
+          "component": "input",
+          "props": {
+            "label": "Date",
+            "name": "date",
+            "type": "date",
+            "value": "",
+            "validation": "z.date()"
+          }
+        },
+        {
+          "component": "input",
+          "props": {
+            "label": "Valid Until",
+            "name": "validUntil",
+            "type": "date",
+            "value": "",
+            "validation": "z.date()"
+          }
+        }
+      ]
+    },
+
+    {
+      "component": "card",
+      "props": {
+        "title": "USD to INR Exchange Rate",
+        "action": "refreshRate"
+      },
+      "children": [
+        {
+          "component": "input",
+          "props": {
+            "label": "Exchange Rate",
+            "name": "exchangeRate",
+            "type": "number",
+            "value": "",
+            "validation": "z.number().positive()"
+          }
+        },
+        {
+          "component": "toggle",
+          "props": {
+            "label": "Live Rate",
+            "name": "isLiveRate",
+            "value": false
+          }
+        }
+      ]
+    },
+
+    {
+      "component": "grid",
+      "props": {
+        "columns": 2
+      },
+      "children": [
+        {
+          "component": "card",
+          "props": {
+            "title": "Seller Details"
+          },
+          "children": [
+            {
+              "component": "input",
+              "props": {
+                "label": "Company Name",
+                "name": "sellerCompany",
+                "type": "text",
+                "validation": "z.string().min(1)"
+              }
+            },
+            {
+              "component": "input",
+              "props": {
+                "label": "GSTIN",
+                "name": "sellerGSTIN",
+                "type": "text",
+                "validation": "z.string().length(15)"
+              }
+            },
+            {
+              "component": "input",
+              "props": {
+                "label": "State",
+                "name": "sellerState",
+                "type": "text",
+                "validation": "z.string().min(1)"
+              }
+            }
+          ]
+        },
+
+        {
+          "component": "card",
+          "props": {
+            "title": "Customer Details"
+          },
+          "children": [
+            {
+              "component": "select",
+              "props": {
+                "label": "Select Customer",
+                "name": "customerId",
+                "options": [],
+                "validation": "z.string().min(1)"
+              }
+            },
+            {
+              "component": "input",
+              "props": {
+                "label": "Customer Name",
+                "name": "customerName",
+                "type": "text",
+                "validation": "z.string().min(1)"
+              }
+            },
+            {
+              "component": "input",
+              "props": {
+                "label": "Customer GSTIN",
+                "name": "customerGSTIN",
+                "type": "text",
+                "validation": "z.string().length(15)"
+              }
+            },
+            {
+              "component": "select",
+              "props": {
+                "label": "Place of Supply",
+                "name": "placeOfSupply",
+                "options": [],
+                "validation": "z.string().min(1)"
+              }
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "component": "card",
+      "props": {
+        "title": "Line Items",
+        "action": "addItem"
+      },
+      "children": [
+        {
+          "component": "table",
+          "props": {
+            "columns": [
+              "Item Code",
+              "Description",
+              "HSN",
+              "Qty",
+              "Rate",
+              "Amount",
+              "GST %",
+              "Total"
+            ],
+            "data": []
+          }
+        }
+      ]
+    },
+
+    {
+      "component": "card",
+      "props": {
+        "title": "Summary"
+      },
+      "children": [
+        {
+          "component": "display",
+          "props": {
+            "label": "Subtotal",
+            "name": "subtotal"
+          }
+        },
+        {
+          "component": "input",
+          "props": {
+            "label": "Discount",
+            "name": "discount",
+            "type": "number",
+            "validation": "z.number().min(0)"
+          }
+        },
+        {
+          "component": "display",
+          "props": {
+            "label": "Taxable Amount",
+            "name": "taxableAmount"
+          }
+        },
+        {
+          "component": "display",
+          "props": {
+            "label": "IGST",
+            "name": "igst"
+          }
+        },
+        {
+          "component": "display",
+          "props": {
+            "label": "Total Tax",
+            "name": "totalTax"
+          }
+        },
+        {
+          "component": "display",
+          "props": {
+            "label": "Grand Total",
+            "name": "grandTotal",
+            "highlight": true
+          }
+        }
+      ]
+    },
+
+    {
+      "component": "card",
+      "props": {
+        "title": "Terms & Notes"
+      },
+      "children": [
+        {
+          "component": "input",
+          "props": {
+            "label": "Payment Terms",
+            "name": "paymentTerms",
+            "type": "text",
+            "validation": "z.string().optional()"
+          }
+        },
+        {
+          "component": "input",
+          "props": {
+            "label": "Reference",
+            "name": "reference",
+            "type": "text",
+            "validation": "z.string().optional()"
+          }
+        },
+        {
+          "component": "textarea",
+          "props": {
+            "label": "Notes",
+            "name": "notes",
+            "validation": "z.string().optional()"
+          }
+        }
+      ]
+    }
+  ]
+}
