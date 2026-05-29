@@ -246,7 +246,9 @@ export default function TaxInvoicesPage() {
   };
 
   const handleSendEmail = (invoice: Invoice) => {
-    toast.success(`Email sent to customer for ${invoice.invoiceNumber}`);
+    const updated: Invoice = { ...invoice, status: 'sent' };
+    setInvoices((prev) => prev.map((inv) => (inv.id === invoice.id ? updated : inv)));
+    setSelectedInvoice((prev) => (prev?.id === invoice.id ? updated : prev));
   };
 
   const handleMarkAsPaid = async (invoice: Invoice) => {
