@@ -17,11 +17,6 @@ const schema = z
     firstName: z.string().min(2, 'Enter your first name'),
     lastName: z.string().min(2, 'Enter your last name'),
     email: z.string().email('Enter a valid email'),
-    phone: z
-      .string()
-      .min(6, 'Enter a valid phone number')
-      .max(20, 'Too long')
-      .regex(/^[+0-9()\-\s]*$/, 'Invalid phone number'),
     password: z.string().min(12, 'At least 12 characters'),
     confirmPassword: z.string().min(12, 'At least 12 characters'),
   })
@@ -49,7 +44,6 @@ export default function RegisterPage() {
       firstName: '',
       lastName: '',
       email: '',
-      phone: '',
       password: '',
       confirmPassword: '',
     },
@@ -120,15 +114,6 @@ export default function RegisterPage() {
             <Input id="email" type="email" placeholder="you@company.com" {...register('email')} />
             {errors.email?.message ? (
               <p className="text-xs text-destructive">{errors.email.message}</p>
-            ) : null}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="phone">
-              Phone Number <span className="text-destructive">*</span>
-            </Label>
-            <Input id="phone" type="tel" placeholder="+91 98765 43210" {...register('phone')} />
-            {errors.phone?.message ? (
-              <p className="text-xs text-destructive">{errors.phone.message}</p>
             ) : null}
           </div>
           <div className="space-y-2">
