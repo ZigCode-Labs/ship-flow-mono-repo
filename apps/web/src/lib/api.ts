@@ -78,6 +78,17 @@ function formatApiError(text: string, fallback: string) {
   return text;
 }
 
+export class NetworkError extends Error {
+  constructor(
+    message: string,
+    public readonly url: string,
+    public readonly cause?: unknown,
+  ) {
+    super(message);
+    this.name = 'NetworkError';
+  }
+}
+
 export async function apiFetch<T = unknown>(
   path: string,
   { method = 'GET', body, headers = {} }: FetchOptions = {},
@@ -86,16 +97,25 @@ export async function apiFetch<T = unknown>(
   const orgId = getActiveOrgId();
   const url = `${API_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`;
 
-  const res = await fetch(url, {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(orgId ? { 'x-org-id': orgId } : {}),
-      ...headers,
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...(orgId ? { 'x-org-id': orgId } : {}),
+        ...headers,
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch (err) {
+    throw new NetworkError(
+      `Cannot reach the server at ${API_BASE_URL}. Is the API running?`,
+      url,
+      err,
+    );
+  }
 
   if (res.status === 401) {
     if (typeof window !== 'undefined') {
