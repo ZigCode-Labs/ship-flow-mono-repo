@@ -5,6 +5,7 @@ export const sendDeliveryChallanEmailSchema = z.object({
   recipientEmail: z.string().email(),
   subject: z.string().min(1),
   message: z.string().min(1),
+  pdfBase64: z.string().optional(),
 });
 
 export type SendDeliveryChallanEmailDto = z.infer<
