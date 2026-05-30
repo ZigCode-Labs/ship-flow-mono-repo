@@ -228,7 +228,8 @@ export default function TaxInvoicesPage() {
         import('@/components/pdf/TaxInvoicePDF'),
       ]);
       const { createElement } = await import('react');
-      const blob = await pdf(createElement(TaxInvoicePDF, { invoice })).toBlob();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const blob = await pdf(createElement(TaxInvoicePDF, { invoice }) as any).toBlob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;

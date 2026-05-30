@@ -90,7 +90,8 @@ export default function CreditNotesPage() {
         import('@/components/pdf/CreditNotePDF'),
       ]);
       const { createElement } = await import('react');
-      const blob = await pdf(createElement(CreditNotePDF, { creditNote })).toBlob();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const blob = await pdf(createElement(CreditNotePDF, { creditNote }) as any).toBlob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;

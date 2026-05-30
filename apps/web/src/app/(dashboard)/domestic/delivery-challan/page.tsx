@@ -8,6 +8,10 @@ import { DetailPanel } from './components/DetailPanel';
 import { DeliveryChallan } from './types';
 import { toast } from '@/components/ui/sonner';
 import { api } from '@/lib/api';
+import {
+  DocumentEmailDialog,
+  type DocumentEmailDialogValues,
+} from '@/components/email/DocumentEmailDialog';
 
 export default function DeliveryChallanPage() {
   const [deliveryChallans, setDeliveryChallans] = useState<DeliveryChallan[]>([]);
@@ -16,6 +20,13 @@ export default function DeliveryChallanPage() {
   );
   const [isCreatingNew, setIsCreatingNew] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false);
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [emailDraft, setEmailDraft] = useState<DocumentEmailDialogValues>({
+    recipientEmail: '',
+    subject: '',
+    message: '',
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -151,7 +162,11 @@ export default function DeliveryChallanPage() {
         import('@/components/pdf/DeliveryChallanPDF'),
       ]);
       const { createElement } = await import('react');
-      const blob = await pdf(createElement(DeliveryChallanPDF, { challan: deliveryChallan })).toBlob();
+      // Type cast required: pdf() expects DocumentProps element but DeliveryChallanPDF wraps Document internally
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const blob = await pdf(
+        createElement(DeliveryChallanPDF, { challan: deliveryChallan }) as any,
+      ).toBlob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -169,7 +184,44 @@ export default function DeliveryChallanPage() {
   };
 
   const handleSendEmail = (deliveryChallan: DeliveryChallan) => {
-    toast.success(`Email sent to customer for ${deliveryChallan.challanNumber}`);
+    setSelectedDeliveryChallan(deliveryChallan);
+    setEmailDraft({
+      recipientEmail: '',
+      subject: `Delivery Challan ${deliveryChallan.challanNumber}`,
+      message: `Please find attached the delivery challan ${deliveryChallan.challanNumber}.`,
+    });
+    setIsEmailDialogOpen(true);
+  };
+
+  const handleSubmitEmail = async (values: DocumentEmailDialogValues) => {
+    if (!selectedDeliveryChallan) {
+      toast.error('No delivery challan selected');
+      return;
+    }
+
+    setIsSendingEmail(true);
+    try {
+      await api.post('/delivery-challan-email/send', {
+        challanId: selectedDeliveryChallan.id,
+        recipientEmail: values.recipientEmail,
+        subject: values.subject,
+        message: values.message,
+      });
+
+      setDeliveryChallans((prev) =>
+        prev.map((dc) =>
+          dc.id === selectedDeliveryChallan.id ? { ...dc, status: 'sent' as const } : dc,
+        ),
+      );
+      setSelectedDeliveryChallan((prev) => (prev ? { ...prev, status: 'sent' } : null));
+      setIsEmailDialogOpen(false);
+      toast.success('Delivery challan email sent');
+    } catch (error) {
+      console.error('Failed to send delivery challan email:', error);
+      toast.error(error instanceof Error ? error.message : 'Failed to send delivery challan email');
+    } finally {
+      setIsSendingEmail(false);
+    }
   };
 
   const handleMarkAsDelivered = async (deliveryChallan: DeliveryChallan) => {
@@ -261,6 +313,15 @@ export default function DeliveryChallanPage() {
           <DetailPanel />
         </div>
       )}
+
+      <DocumentEmailDialog
+        open={isEmailDialogOpen}
+        onOpenChange={setIsEmailDialogOpen}
+        title="Email Delivery Challan"
+        values={emailDraft}
+        submitting={isSendingEmail}
+        onSubmit={handleSubmitEmail}
+      />
     </div>
   );
 }
