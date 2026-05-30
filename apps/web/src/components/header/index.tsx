@@ -65,17 +65,17 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
               const isActive =
                 pathname === item.href ||
                 (item.href === '/reports' && pathname.startsWith('/reports'));
+              const isDisabled = !activeOrg?.onboardingDone;
 
               return (
-                <Link
+                <span
                   key={item.name}
-                  href={item.href}
                   className={`px-2 py-1 text-xs rounded-md transition ${
                     isActive ? 'bg-blue-50 text-blue-600' : 'text-muted-foreground hover:bg-muted'
-                  }`}
+                  } ${isDisabled ? 'opacity-50 pointer-events-none cursor-not-allowed' : ''}`}
                 >
                   {item.name}
-                </Link>
+                </span>
               );
             })}
           </nav>

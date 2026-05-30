@@ -13,8 +13,8 @@ export class OrgExportSettingsService {
   async findSettings(orgId: string, userId: string) {
     await this.assertMember(orgId, userId);
 
-    const org = await this.prisma.organization.findFirst({
-      where: { id: orgId, deletedAt: null },
+    const settings = await this.prisma.organizationExportDefaults.findUnique({
+      where: { organizationId: orgId },
       select: {
         industryType: true,
         documentSet: true,
@@ -42,15 +42,32 @@ export class OrgExportSettingsService {
       };
     });
 
-    return { ...org, activeDocuments };
+    return {
+      industryType: settings?.industryType ?? null,
+      documentSet: settings?.documentSet ?? 'standard',
+      defaultAdditionalDetails: settings?.defaultAdditionalDetails ?? null,
+      defaultDescriptionOfGoods: settings?.defaultDescriptionOfGoods ?? null,
+      defaultAdditionalInfo: settings?.defaultAdditionalInfo ?? null,
+      defaultFreightBasis: settings?.defaultFreightBasis ?? null,
+      activeDocuments,
+    };
   }
 
   async updateSettings(orgId: string, userId: string, data: UpdateExportSettingsDto) {
     await this.assertMember(orgId, userId);
 
-    return this.prisma.organization.update({
-      where: { id: orgId },
-      data: {
+    return this.prisma.organizationExportDefaults.upsert({
+      where: { organizationId: orgId },
+      create: {
+        organizationId: orgId,
+        industryType: data.industryType ?? undefined,
+        documentSet: data.documentSet ?? undefined,
+        defaultAdditionalDetails: data.defaultAdditionalDetails ?? undefined,
+        defaultDescriptionOfGoods: data.defaultDescriptionOfGoods ?? undefined,
+        defaultAdditionalInfo: data.defaultAdditionalInfo ?? undefined,
+        defaultFreightBasis: data.defaultFreightBasis ?? undefined,
+      },
+      update: {
         industryType: data.industryType ?? undefined,
         documentSet: data.documentSet ?? undefined,
         defaultAdditionalDetails: data.defaultAdditionalDetails ?? undefined,

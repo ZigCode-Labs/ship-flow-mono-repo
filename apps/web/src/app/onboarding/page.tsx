@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { api, API_BASE_URL } from '@/lib/api';
 import { useActiveOrgStore } from '@/store/organization';
+import Header from '@/components/header';
 import {
   Button,
   Separator,
@@ -244,7 +245,9 @@ export default function OnboardingPage() {
   }, [user]);
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-8">
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      <div className="flex-1 bg-gray-50 px-4 py-8">
       <div className="mx-auto w-full max-w-5xl space-y-6">
         {/* ── User Profile Card ── */}
         <div className="rounded-xl border bg-white p-6 shadow-sm">
@@ -454,6 +457,7 @@ export default function OnboardingPage() {
             <TemplatesTab />
           </TabsContent>
         </Tabs>
+        </div>
       </div>
     </div>
   );
