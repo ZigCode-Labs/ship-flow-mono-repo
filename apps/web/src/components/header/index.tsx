@@ -68,14 +68,16 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
               const isDisabled = !activeOrg?.onboardingDone;
 
               return (
-                <span
+                <Link
                   key={item.name}
-                  className={`px-2 py-1 text-xs rounded-md transition ${
+                  href={isDisabled ? '#' : item.href}
+                  onClick={(e) => { if (isDisabled) e.preventDefault(); }}
+                  className={`px-2 py-1 text-xs rounded-md transition cursor-pointer ${
                     isActive ? 'bg-blue-50 text-blue-600' : 'text-muted-foreground hover:bg-muted'
-                  } ${isDisabled ? 'opacity-50 pointer-events-none cursor-not-allowed' : ''}`}
+                  } ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   {item.name}
-                </span>
+                </Link>
               );
             })}
           </nav>

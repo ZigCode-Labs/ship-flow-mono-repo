@@ -72,7 +72,7 @@ const companySchema = z.object({
     .regex(/^[A-Z0-9\-_]*$/, 'Letters & numbers only')
     .or(z.literal(''))
     .optional(),
-  itemCodeDigits: z.number().int().min(3).max(8).optional(),
+  itemCodeDigits: z.coerce.number().int().min(3).max(8).optional(),
 });
 
 type CompanyFormValues = z.infer<typeof companySchema>;
@@ -217,7 +217,9 @@ export default function OnboardingPage() {
           country: 'India',
         });
         orgId = org.id;
-        setActiveOrg({ id: org.id, name: org.name, slug: org.slug, tradeName: org.tradeName, onboardingDone: false });
+        setActiveOrg({ id: org.id, name: org.name, slug: org.slug, tradeName: org.tradeName, onboardingDone: true });
+      } else {
+        setActiveOrg({ ...activeOrg, onboardingDone: true });
       }
 
       const { name: _name, tradeName: _tradeName, ...rest } = values;
@@ -226,6 +228,7 @@ export default function OnboardingPage() {
         name: values.name,
         tradeName: values.tradeName,
         itemCodeDigits: values.itemCodeDigits ? Number(values.itemCodeDigits) : undefined,
+        onboardingDone: true,
       });
 
       if (logoFile) await uploadFile(orgId, logoFile, 'logo').catch(() => {});
