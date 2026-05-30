@@ -20,7 +20,7 @@ model User {
   twoFactorSecret     String?
   twoFactorEnabled    Boolean  @default(false)
 
-  memberships   OrganizationMember[]
+  memberships      OrganizationMember[]
 }
 
 model Organization {
@@ -104,6 +104,21 @@ model Organization {
   @@map("organizations")
 }
 
+model OrganizationActiveDocument {
+  id             String       @id @default(uuid())
+  organizationId String
+  documentName   String       @db.VarChar(100)
+  isEnabled      Boolean      @default(true)
+  displayOrder   Int          @default(0)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, documentName])
+  @@map("organization_active_documents")
+}
+
 model OrganizationMember {
   id             String    @id @default(uuid())
   organizationId String
@@ -150,7 +165,7 @@ model DomesticProforma {
   validUntil        DateTime
   exchangeRate      Float
   isRateLocked      Boolean                @default(false)
-  
+
   sellerCompanyName String                 @db.VarChar(255)
   sellerGstin       String                 @db.VarChar(50)
   sellerState       String                 @db.VarChar(100)
@@ -161,7 +176,7 @@ model DomesticProforma {
 
   discountValue     Float                  @default(0)
   discountType      String                 @db.VarChar(10) @default("₹")
-  
+
   subtotal          Float
   discountAmount    Float                  @default(0)
   taxableAmount     Float
@@ -172,7 +187,7 @@ model DomesticProforma {
   paymentTerms      String?                @db.Text
   reference         String?                @db.VarChar(255)
   notes             String?                @db.Text
-  
+
   status            String                 @default("DRAFT") @db.VarChar(50)
 
   createdAt         DateTime               @default(now())
@@ -187,7 +202,7 @@ model DomesticProformaItem {
   id               String           @id @default(uuid())
   proformaId       String
   proforma         DomesticProforma @relation(fields: [proformaId], references: [id], onDelete: Cascade)
-  
+
   itemCode         String           @db.VarChar(100)
   description      String           @db.Text
   hsn              String           @db.VarChar(50)
@@ -209,7 +224,7 @@ model DeliveryChallan {
   challanDate       DateTime
   deliveryDate      DateTime?
   deliveryType      String                 @db.VarChar(50) @default("supply_of_goods")
-  
+
   companyName       String                 @db.VarChar(255)
   gstin             String                 @db.VarChar(50) @default("")
   state             String                 @db.VarChar(100) @default("")
@@ -252,7 +267,7 @@ model DeliveryChallanItem {
   id               String           @id @default(uuid())
   challanId        String
   challan          DeliveryChallan  @relation(fields: [challanId], references: [id], onDelete: Cascade)
-  
+
   itemCode         String           @db.VarChar(100) @default("")
   description      String           @db.Text
   hsn              String           @db.VarChar(50) @default("")
@@ -273,7 +288,7 @@ model DeliveryChallanEmail {
   id             String           @id @default(uuid())
   challanId      String
   recipientEmail String           @db.VarChar(255)
-  subject        String           @db.VarChar(255)
+  subject        String           @db.VarChar(500)
   message        String           @db.Text
   status         String           @default("pending") @db.VarChar(30)
   sentAt         DateTime?
@@ -405,35 +420,20 @@ model EmailContact {
 }
 
 model OrganizationEmailTemplate {
-  id              String       @id @default(uuid())
-  organizationId  String
-  documentType    String       @db.VarChar(50)
-  subjectTemplate String       @db.VarChar(500)
-  bodyTemplate    String       @db.Text
-  defaultCc       String?      @db.Text
-  defaultBcc      String?      @db.Text
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  id               String       @id @default(uuid())
+  organizationId   String
+  documentType     String       @db.VarChar(100)
+  subjectTemplate  String       @db.VarChar(500)
+  bodyTemplate     String       @db.Text
+  defaultCc        String?      @db.VarChar(500)
+  defaultBcc       String?      @db.VarChar(500)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
 
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@unique([organizationId, documentType])
   @@map("organization_email_templates")
-}
-
-model OrganizationActiveDocument {
-  id              String       @id @default(uuid())
-  organizationId  String
-  documentName    String       @db.VarChar(100)
-  isEnabled       Boolean      @default(false)
-  displayOrder    Int          @default(0)
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-
-  @@unique([organizationId, documentName])
-  @@map("organization_active_documents")
 }
 
 model EmailLog {
