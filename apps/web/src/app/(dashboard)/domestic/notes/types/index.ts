@@ -9,7 +9,7 @@ export interface CreditNote {
   placeOfSupply: string;
   reason: string;
   amount: number;
-  status: 'draft' | 'sent' | 'applied';
+  status: 'draft' | 'sent' | 'applied' | 'voided';
   lineItems: Array<{
     id: string;
     itemCode: string;

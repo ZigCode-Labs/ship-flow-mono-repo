@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { CircleX, Download, Edit, FileText, Mail } from 'lucide-react';
+import { AlertCircle, CircleX, Download, Edit, FileText, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CreditNotePreview } from '@/app/(dashboard)/domestic/notes/components/CreditNotePreview';
+import { VoidCreditNoteDialog } from '@/app/(dashboard)/domestic/notes/components/VoidCreditNoteDialog';
 import type { CreditNote } from '@/app/(dashboard)/domestic/notes/types';
 import { SendCreditNoteEmailDialog } from '@/components/credit-note/SendCreditNoteEmailDialog';
 
@@ -13,6 +14,7 @@ interface CreditNoteDetailPanelProps {
   onCancelForm: () => void;
   onDownloadPDF: (creditNote: CreditNote) => void;
   onSendEmail?: (creditNote: CreditNote) => void;
+  onVoid?: (creditNote: CreditNote) => void;
 }
 
 function EmptyState() {
@@ -30,8 +32,10 @@ export function CreditNoteDetailPanel({
   onCancelForm,
   onDownloadPDF,
   onSendEmail,
+  onVoid,
 }: CreditNoteDetailPanelProps) {
   const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false);
+  const [isVoidDialogOpen, setIsVoidDialogOpen] = useState(false);
 
   if (isCreatingNew) {
     return (
@@ -80,27 +84,43 @@ export function CreditNoteDetailPanel({
               <Mail data-icon="inline-start" />
               Email
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-9 rounded-[5px] border-gray-200 px-3 text-[14px] font-semibold text-black"
-            >
-              <Edit data-icon="inline-start" />
-              Edit
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-9 rounded-[5px] border-gray-200 px-3 text-[14px] font-semibold text-red-600"
-            >
-              <CircleX data-icon="inline-start" />
-              Void
-            </Button>
+            {creditNote.status !== 'voided' && (
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-9 rounded-[5px] border-gray-200 px-3 text-[14px] font-semibold text-black"
+                >
+                  <Edit data-icon="inline-start" />
+                  Edit
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-9 rounded-[5px] border-gray-200 px-3 text-[14px] font-semibold text-red-600"
+                  onClick={() => setIsVoidDialogOpen(true)}
+                >
+                  <CircleX data-icon="inline-start" />
+                  Void
+                </Button>
+              </>
+            )}
           </div>
         </header>
 
         <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6">
-          <CreditNotePreview creditNote={creditNote} />
+          {creditNote.status === 'voided' && (
+            <div className="mb-6 flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
+              <AlertCircle className="mt-0.5 size-5 shrink-0 text-red-600" />
+              <div>
+                <p className="text-[15px] font-semibold text-red-700">This Credit Note is VOID</p>
+                <p className="mt-0.5 text-[13px] text-red-600">
+                  This document is no longer valid for accounting purposes.
+                </p>
+              </div>
+            </div>
+          )}
+          <CreditNotePreview creditNote={creditNote} isVoided={creditNote.status === 'voided'} />
         </div>
       </div>
 
@@ -109,6 +129,13 @@ export function CreditNoteDetailPanel({
         onOpenChange={setIsEmailDialogOpen}
         creditNote={creditNote}
         onSent={() => onSendEmail?.(creditNote)}
+      />
+
+      <VoidCreditNoteDialog
+        creditNote={creditNote}
+        open={isVoidDialogOpen}
+        onOpenChange={setIsVoidDialogOpen}
+        onVoid={(cn) => onVoid?.(cn)}
       />
     </>
   );

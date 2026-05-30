@@ -83,6 +83,19 @@ export default function CreditNotesPage() {
     setSelectedCreditNote((prev) => (prev?.id === creditNote.id ? updated : prev));
   };
 
+  const handleVoid = (creditNote: CreditNote) => {
+    const updated: CreditNote = { ...creditNote, status: 'voided' };
+    setCreditNotes((prev) => {
+      const next = prev.map((cn) => (cn.id === creditNote.id ? updated : cn));
+      localStorage.setItem('credit_notes', JSON.stringify(next));
+      return next;
+    });
+    setSelectedCreditNote((prev) => (prev?.id === creditNote.id ? updated : prev));
+    toast.success('Credit Note Voided', {
+      description: `${creditNote.creditNoteNumber} has been voided.`,
+    });
+  };
+
   const handleDownloadPDF = async (creditNote: CreditNote) => {
     try {
       const [{ pdf }, { CreditNotePDF }] = await Promise.all([
@@ -124,6 +137,7 @@ export default function CreditNotesPage() {
           onCancelForm={handleCancelForm}
           onDownloadPDF={handleDownloadPDF}
           onSendEmail={handleSendEmail}
+          onVoid={handleVoid}
         />
       </div>
     </div>
