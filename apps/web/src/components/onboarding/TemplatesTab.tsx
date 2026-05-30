@@ -11,17 +11,9 @@ import { SectionHeader, SaveBar } from './shared';
 
 const INDUSTRY_TYPES = [
   { value: '', label: '— Select your industry —' },
+  { value: 'standard', label: 'Standard' },
   { value: 'ceramic_tiles', label: 'Ceramic Tiles' },
-  { value: 'textile', label: 'Textile & Garments' },
-  { value: 'engineering', label: 'Engineering Goods' },
-  { value: 'pharmaceuticals', label: 'Pharmaceuticals' },
-  { value: 'chemicals', label: 'Chemicals' },
-  { value: 'gems_jewelry', label: 'Gems & Jewelry' },
   { value: 'scrap_ferrous', label: 'Scrap & Ferrous Products' },
-  { value: 'food_agriculture', label: 'Food & Agriculture' },
-  { value: 'it_electronics', label: 'IT & Electronics' },
-  { value: 'auto_parts', label: 'Automobile Parts' },
-  { value: 'other', label: 'Other' },
 ];
 
 const DOCUMENT_SETS = [
@@ -163,7 +155,10 @@ export function TemplatesTab() {
           <label className="block text-sm font-medium text-gray-700 mb-1.5">Industry Type *</label>
           <select
             value={industryType}
-            onChange={(e) => setIndustryType(e.target.value)}
+            onChange={(e) => {
+              setIndustryType(e.target.value);
+              if (e.target.value) setDocumentSet(e.target.value);
+            }}
             className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring"
           >
             {INDUSTRY_TYPES.map((o) => (
@@ -180,14 +175,21 @@ export function TemplatesTab() {
         <Separator />
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {DOCUMENT_SETS.map((set) => (
-            <button
+            <div
               key={set.value}
-              type="button"
-              onClick={() => setDocumentSet(set.value)}
-              className={`relative rounded-xl border-2 p-4 text-left transition-colors ${documentSet === set.value ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white hover:border-gray-300'}`}
+              role="button"
+              tabIndex={0}
+              onClick={() => {
+                setDocumentSet(set.value);
+                setIndustryType(set.value);
+              }}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setDocumentSet(set.value); setIndustryType(set.value); } }}
+              className={`relative cursor-pointer rounded-xl border-2 p-4 text-left transition-colors ${documentSet === set.value ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white hover:border-gray-300'}`}
             >
               {documentSet === set.value && (
-                <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-blue-600" />
+                <span className="absolute right-3 top-3 inline-flex items-center rounded-full bg-blue-600 px-2 py-0.5 text-xs font-medium text-white">
+                  Selected
+                </span>
               )}
               <p className="font-medium text-sm text-gray-900">{set.label}</p>
               <p className="text-xs text-gray-500 mt-1">{set.description}</p>
@@ -196,8 +198,8 @@ export function TemplatesTab() {
                   <span key={icon} className="rounded bg-gray-100 px-1.5 py-0.5 text-xs font-mono text-gray-600">{icon}</span>
                 ))}
               </div>
-              <button type="button" className="mt-2 text-xs text-blue-600 hover:underline">↗ Preview Documents</button>
-            </button>
+              <button type="button" onClick={(e) => e.stopPropagation()} className="mt-2 text-xs text-blue-600 hover:underline">↗ Preview Documents</button>
+            </div>
           ))}
         </div>
       </div>
