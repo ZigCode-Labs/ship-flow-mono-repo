@@ -54,11 +54,15 @@ export class DeliveryChallanEmailService {
     });
 
     try {
+      const attachments = data.pdfBase64
+        ? [{ filename: `${challan.challanNumber}.pdf`, content: Buffer.from(data.pdfBase64, 'base64') }]
+        : undefined;
+
       await this.emailService.sendEmail(
         data.recipientEmail,
         data.subject,
         buildDeliveryChallanEmailHtml(data.message, challan.challanNumber),
-        { fromName: challan.companyName },
+        { fromName: challan.companyName, attachments },
       );
 
       await this.prisma.$transaction([

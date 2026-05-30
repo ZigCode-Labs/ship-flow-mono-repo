@@ -201,11 +201,29 @@ export default function DeliveryChallanPage() {
 
     setIsSendingEmail(true);
     try {
+      const [{ pdf }, { DeliveryChallanPDF }] = await Promise.all([
+        import('@react-pdf/renderer'),
+        import('@/components/pdf/DeliveryChallanPDF'),
+      ]);
+      const { createElement } = await import('react');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const blob = await pdf(
+        createElement(DeliveryChallanPDF, { challan: selectedDeliveryChallan }) as any,
+      ).toBlob();
+
+      const pdfBase64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve((reader.result as string).split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+
       await api.post('/delivery-challan-email/send', {
         challanId: selectedDeliveryChallan.id,
         recipientEmail: values.recipientEmail,
         subject: values.subject,
         message: values.message,
+        pdfBase64,
       });
 
       setDeliveryChallans((prev) =>
