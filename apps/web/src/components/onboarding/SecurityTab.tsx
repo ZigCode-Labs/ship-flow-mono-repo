@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { Upload, ShieldCheck, ShieldOff, Eye, EyeOff } from 'lucide-react';
 import { Separator, Button, Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Avatar, AvatarFallback, AvatarImage } from '@shipflow/ui';
 import { FormInput, useZodForm } from '@shipflow/ui-forms';
-import { api, apiFetch } from '@/lib/api';
+import { api, apiFetch, API_BASE_URL } from '@/lib/api';
 import { useAuthStore } from '@/store/auth';
 import { SectionHeader, SaveBar } from './shared';
 
@@ -31,10 +31,12 @@ type TwoFaSetupData = { qrCodeDataUrl: string; secret: string };
 type UserProfile = { id: string; email: string; firstName?: string | null; lastName?: string | null; profilePhotoUrl?: string | null; twoFactorEnabled: boolean };
 
 export function SecurityTab() {
-  const { token, logout } = useAuthStore((s) => ({ token: s.token, logout: s.logout }));
+  const token = useAuthStore((s) => s.token);
+  const logout = useAuthStore((s) => s.logout);
   const [profile, setProfile] = React.useState<UserProfile | null>(null);
 
   const [photoSaving, setPhotoSaving] = React.useState(false);
+  const [photoError, setPhotoError] = React.useState<string | null>(null);
   const [pwSaving, setPwSaving] = React.useState(false);
   const [pwError, setPwError] = React.useState<string | null>(null);
   const [pwSuccess, setPwSuccess] = React.useState(false);
@@ -65,15 +67,28 @@ export function SecurityTab() {
     const file = e.target.files?.[0];
     if (!file || !token) return;
     setPhotoSaving(true);
+    setPhotoError(null);
     try {
       const formData = new FormData();
       formData.append('file', file);
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:9000'}/users/me/photo`,
-        { method: 'POST', headers: { Authorization: `Bearer ${token}` }, body: formData },
-      );
+      let res: Response;
+      try {
+        res = await fetch(`${API_BASE_URL}/users/me/photo`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+        });
+      } catch {
+        throw new Error(`Cannot reach the server at ${API_BASE_URL}. Is the API running?`);
+      }
+      if (!res.ok) {
+        const text = await res.text().catch(() => '');
+        throw new Error(text || `Upload failed with status ${res.status}`);
+      }
       const data = await res.json();
       if (data.url) setProfile((p) => p ? { ...p, profilePhotoUrl: data.url } : p);
+    } catch (err) {
+      setPhotoError(err instanceof Error ? err.message : 'Failed to upload photo');
     } finally {
       setPhotoSaving(false);
     }
@@ -159,7 +174,7 @@ export function SecurityTab() {
     : 'U';
 
   const photoSrc = profile?.profilePhotoUrl
-    ? `${process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:9000'}${profile.profilePhotoUrl}`
+    ? `${API_BASE_URL}${profile.profilePhotoUrl}`
     : undefined;
 
   return (
@@ -179,6 +194,9 @@ export function SecurityTab() {
             <input type="file" accept="image/jpeg,image/png" className="hidden" onChange={handlePhotoChange} />
           </label>
         </div>
+        {photoError && (
+          <p className="text-sm text-destructive">{photoError}</p>
+        )}
       </div>
 
       {/* Change Password */}
