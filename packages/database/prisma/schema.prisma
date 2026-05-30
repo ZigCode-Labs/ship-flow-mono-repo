@@ -27,70 +27,6 @@ model Organization {
   id              String    @id @default(uuid())
   name            String
   slug            String    @unique
-  tradeName       String?
-  iecCode         String?
-  gstNumber       String?
-  panNumber       String?
-  cinNumber       String?
-  registrationNumber String?
-  adCode                  String?
-  rcmcNumber              String?
-  rcmcExpiry              DateTime?
-  dgftAuth                String?
-  dgftExpiry              DateTime?
-  tanNumber               String?
-  ircNo                   String?
-  portRegistrationNumber  String?
-  sedexRegistrationNumber String?
-  complianceNotes         String?  @db.Text
-  addressLine1    String?
-  addressLine2    String?
-  city            String?
-  state           String?
-  pincode         String?
-  country         String    @default("India")
-  fax             String?
-  phone           String?
-  phone2          String?
-  phone3          String?
-  email           String?
-  website         String?
-  logoUrl         String?
-  signatureUrl    String?
-  stampUrl        String?
-  bankName        String?
-  bankAccountNo   String?
-  bankIFSC        String?
-  bankBranch      String?
-  bankAddress     String?  @db.Text
-  swiftCode       String?
-  masterCurrency  String    @default("USD")
-  countryOfOrigin String?   @default("India")
-  portOfLoading   String?
-  placeOfReceipt  String?
-  itemCodePrefix  String?
-  itemCodeDigits  Int       @default(4)
-
-  smtpEnabled     Boolean   @default(false)
-  smtpHost        String?
-  smtpPort        Int?
-  smtpFromEmail   String?
-  smtpFromName    String?
-  smtpUseTls      Boolean   @default(true)
-  emailReplyTo    String?
-
-  authorizedSignatoryName        String?
-  authorizedSignatoryDesignation String?
-
-  defaultInvoiceTerms          String?  @db.Text
-  defaultProformaTerms         String?  @db.Text
-  industryType                 String?
-  documentSet                  String?  @default("standard")
-  defaultAdditionalDetails     String?  @db.Text
-  defaultDescriptionOfGoods    String?  @db.Text
-  defaultAdditionalInfo        String?  @db.Text
-  defaultFreightBasis          String?  @db.Text
-
   onboardingDone  Boolean   @default(false)
   isActive        Boolean   @default(true)
   createdAt       DateTime  @default(now())
@@ -100,8 +36,128 @@ model Organization {
   members         OrganizationMember[]
   emailTemplates  OrganizationEmailTemplate[]
   activeDocuments OrganizationActiveDocument[]
+  profile         OrganizationProfile?
+  compliance      OrganizationCompliance?
+  banking         OrganizationBanking?
+  smtp            OrganizationSmtp?
+  exportDefaults  OrganizationExportDefaults?
 
   @@map("organizations")
+}
+
+model OrganizationProfile {
+  id                           String       @id @default(uuid())
+  organizationId               String       @unique
+  tradeName                    String?
+  addressLine1                 String?
+  addressLine2                 String?
+  city                         String?
+  state                        String?
+  pincode                      String?
+  country                      String       @default("India")
+  fax                          String?
+  phone                        String?
+  phone2                       String?
+  phone3                       String?
+  email                        String?
+  website                      String?
+  logoUrl                      String?
+  signatureUrl                 String?
+  stampUrl                     String?
+  authorizedSignatoryName      String?
+  authorizedSignatoryDesignation String?
+  createdAt                    DateTime     @default(now())
+  updatedAt                    DateTime     @updatedAt
+
+  organization                 Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("organization_profiles")
+}
+
+model OrganizationCompliance {
+  id                      String       @id @default(uuid())
+  organizationId          String       @unique
+  iecCode                 String?
+  gstNumber               String?
+  panNumber               String?
+  cinNumber               String?
+  registrationNumber      String?
+  adCode                  String?
+  rcmcNumber              String?
+  rcmcExpiry              DateTime?
+  dgftAuth                String?
+  dgftExpiry              DateTime?
+  tanNumber               String?
+  ircNo                   String?
+  portRegistrationNumber  String?
+  sedexRegistrationNumber String?
+  complianceNotes         String?      @db.Text
+  createdAt               DateTime     @default(now())
+  updatedAt               DateTime     @updatedAt
+
+  organization            Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("organization_compliances")
+}
+
+model OrganizationBanking {
+  id             String       @id @default(uuid())
+  organizationId String       @unique
+  bankName       String?
+  bankAccountNo  String?
+  bankIFSC       String?
+  bankBranch     String?
+  bankAddress    String?      @db.Text
+  swiftCode      String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("organization_bankings")
+}
+
+model OrganizationSmtp {
+  id             String       @id @default(uuid())
+  organizationId String       @unique
+  smtpEnabled    Boolean      @default(false)
+  smtpHost       String?
+  smtpPort       Int?
+  smtpFromEmail  String?
+  smtpFromName   String?
+  smtpUseTls     Boolean      @default(true)
+  emailReplyTo   String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("organization_smtps")
+}
+
+model OrganizationExportDefaults {
+  id                        String       @id @default(uuid())
+  organizationId            String       @unique
+  masterCurrency            String       @default("USD")
+  countryOfOrigin           String?      @default("India")
+  portOfLoading             String?
+  placeOfReceipt            String?
+  itemCodePrefix            String?
+  itemCodeDigits            Int          @default(4)
+  defaultInvoiceTerms       String?      @db.Text
+  defaultProformaTerms      String?      @db.Text
+  industryType              String?
+  documentSet               String?      @default("standard")
+  defaultAdditionalDetails  String?      @db.Text
+  defaultDescriptionOfGoods String?      @db.Text
+  defaultAdditionalInfo     String?      @db.Text
+  defaultFreightBasis       String?      @db.Text
+  createdAt                 DateTime     @default(now())
+  updatedAt                 DateTime     @updatedAt
+
+  organization              Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("organization_export_defaults")
 }
 
 model OrganizationActiveDocument {
