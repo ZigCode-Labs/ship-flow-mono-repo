@@ -1,9 +1,15 @@
-import 'dotenv/config';
+import { config } from 'dotenv';
+import { resolve } from 'path';
+
+// Load from apps/api/.env first (authoritative), then fall back to dotenv auto-discovery
+config({ path: resolve(__dirname, '../../../apps/api/.env') });
+config(); // load .env from CWD as fallback
+
 import { PrismaClient, DocumentType } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import * as argon2 from 'argon2';
 
-const connectionString = process.env.DATABASE_URL;
+const connectionString = process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/ship_flow_dev';
 const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
@@ -331,6 +337,36 @@ async function seedDeliveryChallans() {
   console.log('✓ Delivery challans seeded (2 records)');
 }
 
+async function seedDeliveryChallanEmails() {
+  const existing = await prisma.deliveryChallanEmail.count();
+  if (existing > 0) {
+    console.log('  Delivery challan emails already exist, skipping');
+    return;
+  }
+
+  const challan = await prisma.deliveryChallan.findFirst({
+    orderBy: { createdAt: 'asc' },
+  });
+
+  if (!challan) {
+    console.log('  No delivery challan found for email seed, skipping');
+    return;
+  }
+
+  await prisma.deliveryChallanEmail.create({
+    data: {
+      challanId: challan.id,
+      recipientEmail: 'buyer@example.com',
+      subject: `Delivery Challan ${challan.challanNumber}`,
+      message: `Please find attached the delivery challan ${challan.challanNumber}.`,
+      status: 'sent',
+      sentAt: new Date(),
+    },
+  });
+
+  console.log('Delivery challan emails seeded (1 record)');
+}
+
 async function seedTaxInvoices() {
   const existing = await prisma.taxInvoice.count();
   if (existing > 0) {
@@ -502,6 +538,70 @@ async function seedTaxInvoices() {
   console.log('✓ Tax invoices seeded (3 records)');
 }
 
+async function seedEmailTemplates() {
+  const orgs = await prisma.organization.findMany({ select: { id: true } });
+  if (orgs.length === 0) {
+    console.log('  No organizations found, skipping email templates');
+    return;
+  }
+
+  const docTypes = [
+    {
+      type: 'commercial_invoice',
+      subject: 'Commercial Invoice {{documentNumber}} from {{exporterName}}',
+      body: `Dear {{buyerName}},\n\nPlease find attached Commercial Invoice {{documentNumber}} for your reference.\n\nAmount: {{currency}} {{amount}}\nDate: {{date}}\n\nIf you have any questions, please feel free to contact us.\n\nBest regards,\n{{exporterName}}`,
+    },
+    {
+      type: 'proforma_invoice',
+      subject: 'Proforma Invoice {{documentNumber}} from {{exporterName}}',
+      body: `Dear {{buyerName}},\n\nPlease find attached Proforma Invoice {{documentNumber}} for your reference.\n\nAmount: {{currency}} {{amount}}\nDate: {{date}}\n\nKindly confirm your acceptance at the earliest.\n\nBest regards,\n{{exporterName}}`,
+    },
+    {
+      type: 'packing_list',
+      subject: 'Packing List {{documentNumber}} from {{exporterName}}',
+      body: `Dear {{buyerName}},\n\nPlease find attached Packing List {{documentNumber}} for shipment reference.\n\nDate: {{date}}\n\nBest regards,\n{{exporterName}}`,
+    },
+    {
+      type: 'bill_of_exchange',
+      subject: 'Bill of Exchange {{documentNumber}} from {{exporterName}}',
+      body: `Dear {{buyerName}},\n\nPlease find attached Bill of Exchange {{documentNumber}} for your acceptance.\n\nAmount: {{currency}} {{amount}}\nDate: {{date}}\n\nBest regards,\n{{exporterName}}`,
+    },
+    {
+      type: 'bill_of_lading',
+      subject: 'Bill of Lading {{documentNumber}} from {{exporterName}}',
+      body: `Dear {{buyerName}},\n\nPlease find attached Bill of Lading {{documentNumber}} for your records.\n\nDate: {{date}}\n\nBest regards,\n{{exporterName}}`,
+    },
+    {
+      type: 'shipping_instructions',
+      subject: 'Shipping Instructions {{documentNumber}} from {{exporterName}}',
+      body: `Dear {{buyerName}},\n\nPlease find attached Shipping Instructions {{documentNumber}} for your reference.\n\nDate: {{date}}\n\nBest regards,\n{{exporterName}}`,
+    },
+    {
+      type: 'certificates',
+      subject: 'Certificate {{documentNumber}} from {{exporterName}}',
+      body: `Dear {{buyerName}},\n\nPlease find attached Certificate {{documentNumber}} for your reference.\n\nDate: {{date}}\n\nBest regards,\n{{exporterName}}`,
+    },
+  ];
+
+  let count = 0;
+  for (const org of orgs) {
+    for (const tpl of docTypes) {
+      await prisma.organizationEmailTemplate.upsert({
+        where: { organizationId_documentType: { organizationId: org.id, documentType: tpl.type } },
+        update: {},
+        create: {
+          organizationId: org.id,
+          documentType: tpl.type,
+          subjectTemplate: tpl.subject,
+          bodyTemplate: tpl.body,
+        },
+      });
+      count++;
+    }
+  }
+  console.log(`✓ Email templates seeded (${count} records across ${orgs.length} orgs)`);
+}
+
 async function main() {
   console.log('Starting seed...\n');
 
@@ -510,7 +610,9 @@ async function main() {
   await seedDomesticBuyers();
   await seedDomesticProformas();
   await seedDeliveryChallans();
+  await seedDeliveryChallanEmails();
   await seedTaxInvoices();
+  await seedEmailTemplates();
 
   console.log('\nSeed completed successfully.');
 }

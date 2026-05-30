@@ -7,15 +7,18 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(uuid())
-  email         String   @unique
-  password      String
-  refreshToken  String?  @db.Text
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  firstName     String?
-  lastName      String?
-  emailVerified Boolean  @default(false)
+  id                  String   @id @default(uuid())
+  email               String   @unique
+  password            String
+  refreshToken        String?  @db.Text
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  firstName           String?
+  lastName            String?
+  emailVerified       Boolean  @default(false)
+  profilePhotoUrl     String?
+  twoFactorSecret     String?
+  twoFactorEnabled    Boolean  @default(false)
 
   memberships   OrganizationMember[]
 }
@@ -30,18 +33,26 @@ model Organization {
   panNumber       String?
   cinNumber       String?
   registrationNumber String?
-  adCode          String?
-  rcmcNumber      String?
-  rcmcExpiry      DateTime?
-  dgftAuth        String?
-  dgftExpiry      DateTime?
+  adCode                  String?
+  rcmcNumber              String?
+  rcmcExpiry              DateTime?
+  dgftAuth                String?
+  dgftExpiry              DateTime?
+  tanNumber               String?
+  ircNo                   String?
+  portRegistrationNumber  String?
+  sedexRegistrationNumber String?
+  complianceNotes         String?  @db.Text
   addressLine1    String?
   addressLine2    String?
   city            String?
   state           String?
   pincode         String?
   country         String    @default("India")
+  fax             String?
   phone           String?
+  phone2          String?
+  phone3          String?
   email           String?
   website         String?
   logoUrl         String?
@@ -51,6 +62,7 @@ model Organization {
   bankAccountNo   String?
   bankIFSC        String?
   bankBranch      String?
+  bankAddress     String?  @db.Text
   swiftCode       String?
   masterCurrency  String    @default("USD")
   countryOfOrigin String?   @default("India")
@@ -59,17 +71,25 @@ model Organization {
   itemCodePrefix  String?
   itemCodeDigits  Int       @default(4)
 
+  smtpEnabled     Boolean   @default(false)
   smtpHost        String?
   smtpPort        Int?
   smtpFromEmail   String?
   smtpFromName    String?
   smtpUseTls      Boolean   @default(true)
+  emailReplyTo    String?
 
   authorizedSignatoryName        String?
   authorizedSignatoryDesignation String?
 
-  defaultInvoiceTerms  String? @db.Text
-  defaultProformaTerms String? @db.Text
+  defaultInvoiceTerms          String?  @db.Text
+  defaultProformaTerms         String?  @db.Text
+  industryType                 String?
+  documentSet                  String?  @default("standard")
+  defaultAdditionalDetails     String?  @db.Text
+  defaultDescriptionOfGoods    String?  @db.Text
+  defaultAdditionalInfo        String?  @db.Text
+  defaultFreightBasis          String?  @db.Text
 
   onboardingDone  Boolean   @default(false)
   isActive        Boolean   @default(true)
@@ -78,6 +98,8 @@ model Organization {
   deletedAt       DateTime?
 
   members         OrganizationMember[]
+  emailTemplates  OrganizationEmailTemplate[]
+  activeDocuments OrganizationActiveDocument[]
 
   @@map("organizations")
 }
@@ -221,6 +243,7 @@ model DeliveryChallan {
   updatedAt         DateTime               @updatedAt
 
   lineItems         DeliveryChallanItem[]
+  emails            DeliveryChallanEmail[]
 
   @@map("delivery_challans")
 }
@@ -244,6 +267,26 @@ model DeliveryChallanItem {
   updatedAt        DateTime         @updatedAt
 
   @@map("delivery_challan_items")
+}
+
+model DeliveryChallanEmail {
+  id             String           @id @default(uuid())
+  challanId      String
+  recipientEmail String           @db.VarChar(255)
+  subject        String           @db.VarChar(255)
+  message        String           @db.Text
+  status         String           @default("pending") @db.VarChar(30)
+  sentAt         DateTime?
+  error          String?          @db.Text
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  challan        DeliveryChallan  @relation(fields: [challanId], references: [id], onDelete: Cascade)
+
+  @@index([challanId])
+  @@index([recipientEmail])
+  @@index([status])
+  @@map("delivery_challan_emails")
 }
 
 model TaxInvoice {
@@ -359,6 +402,38 @@ model EmailContact {
   updatedAt DateTime @updatedAt
 
   @@map("email_contacts")
+}
+
+model OrganizationEmailTemplate {
+  id              String       @id @default(uuid())
+  organizationId  String
+  documentType    String       @db.VarChar(50)
+  subjectTemplate String       @db.VarChar(500)
+  bodyTemplate    String       @db.Text
+  defaultCc       String?      @db.Text
+  defaultBcc      String?      @db.Text
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, documentType])
+  @@map("organization_email_templates")
+}
+
+model OrganizationActiveDocument {
+  id              String       @id @default(uuid())
+  organizationId  String
+  documentName    String       @db.VarChar(100)
+  isEnabled       Boolean      @default(false)
+  displayOrder    Int          @default(0)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, documentName])
+  @@map("organization_active_documents")
 }
 
 model EmailLog {
