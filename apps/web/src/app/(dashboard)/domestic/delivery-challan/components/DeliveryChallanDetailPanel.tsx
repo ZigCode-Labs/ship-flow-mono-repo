@@ -1,7 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { Edit, Package, Download, Mail, X, RotateCcw } from 'lucide-react';
 import { DeliveryChallan } from '../types';
 
@@ -158,6 +160,8 @@ export function DeliveryChallanDetailPanel({
   onEdit,
   onCancel,
 }: DeliveryChallanDetailPanelProps) {
+  const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
+
   if (!deliveryChallan) {
     return <EmptyState />;
   }
@@ -194,7 +198,7 @@ export function DeliveryChallanDetailPanel({
           <Edit className="h-3 w-3" />
           Edit
         </Button>
-        {deliveryChallan.status !== 'delivered' && (
+        {deliveryChallan.status !== 'delivered' && deliveryChallan.status !== 'cancelled' && (
           <Button
             size="xs"
             onClick={() => onMarkAsDelivered(deliveryChallan)}
@@ -222,11 +226,11 @@ export function DeliveryChallanDetailPanel({
           <Mail className="h-3 w-3" />
           Email
         </Button>
-        {deliveryChallan.status !== "cancelled" && (
+        {deliveryChallan.status !== 'cancelled' && (
           <Button
             variant="destructive"
             size="xs"
-            onClick={() => onCancel(deliveryChallan)}
+            onClick={() => setIsCancelDialogOpen(true)}
             className="h-7 gap-1 rounded-sm border-red-200 bg-red-50 text-[11px] text-red-600 hover:bg-red-100"
           >
             <X className="h-3 w-3" />
@@ -332,6 +336,23 @@ export function DeliveryChallanDetailPanel({
           </p>
         </div>
       </div>
+
+      <ConfirmDialog
+        open={isCancelDialogOpen}
+        onOpenChange={setIsCancelDialogOpen}
+        title="Cancel Delivery Challan?"
+        description={
+          <span className="whitespace-nowrap">
+            Are you sure you want to cancel{' '}
+            <strong>{deliveryChallan.challanNumber}</strong>? This cannot be undone.
+          </span>
+        }
+        cancelText="Go Back"
+        confirmText="Yes, Cancel"
+        variant="destructive"
+        className="min-w-[580px] max-w-[95vw]"
+        onConfirm={() => onCancel(deliveryChallan)}
+      />
     </div>
   );
 }
