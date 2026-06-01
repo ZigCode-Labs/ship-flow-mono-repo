@@ -10,7 +10,7 @@
     "test": "turbo test",
     "type-check": "turbo type-check",
     "format": "prettier --write \"**/*.{ts,tsx,js,json,md}\"",
-    "prepare": "husky",
+    "prepare": "command -v husky >/dev/null 2>&1 && husky || true",
     "db:migrate:dev": "pnpm --filter @shipflow/database prisma:migrate:dev",
     "db:migrate:deploy": "pnpm --filter @shipflow/database prisma:migrate:deploy",
     "db:generate": "pnpm --filter @shipflow/database prisma:generate",
