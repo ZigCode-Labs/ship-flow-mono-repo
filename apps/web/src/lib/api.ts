@@ -41,6 +41,18 @@ function getAuthToken(): string | null {
   }
 }
 
+function getRefreshToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const persisted = localStorage.getItem('auth-store');
+    if (!persisted) return null;
+    const parsed = JSON.parse(persisted);
+    return parsed?.state?.refreshToken ?? null;
+  } catch {
+    return null;
+  }
+}
+
 function getActiveOrgId(): string | null {
   if (typeof window === 'undefined') return null;
   try {
@@ -51,6 +63,60 @@ function getActiveOrgId(): string | null {
   } catch {
     return null;
   }
+}
+
+let isRefreshing = false;
+let refreshSubscribers: Array<() => void> = [];
+
+function onTokenRefreshed() {
+  refreshSubscribers.forEach((cb) => cb());
+  refreshSubscribers = [];
+}
+
+function addRefreshSubscriber(callback: () => void) {
+  refreshSubscribers.push(callback);
+}
+
+async function doRefresh(): Promise<boolean> {
+  const refreshToken = getRefreshToken();
+  if (!refreshToken) return false;
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/auth/refresh`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refreshToken }),
+    });
+
+    if (!res.ok) return false;
+
+    const data = await res.json();
+    if (!data.accessToken) return false;
+
+    useAuthStore.getState().setToken(data.accessToken);
+    if (data.refreshToken) {
+      useAuthStore.getState().setRefreshToken(data.refreshToken);
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function refreshAccessToken(): Promise<boolean> {
+  if (!isRefreshing) {
+    isRefreshing = true;
+    const success = await doRefresh();
+    isRefreshing = false;
+    onTokenRefreshed();
+    return success;
+  }
+
+  return new Promise((resolve) => {
+    addRefreshSubscriber(() => {
+      resolve(!!getAuthToken());
+    });
+  });
 }
 
 function formatApiError(text: string, fallback: string) {
@@ -118,6 +184,31 @@ export async function apiFetch<T = unknown>(
   }
 
   if (res.status === 401) {
+    const refreshed = await refreshAccessToken();
+    if (refreshed) {
+      // Retry the original request with the new token
+      const newToken = getAuthToken();
+      const retryRes = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          ...(newToken ? { Authorization: `Bearer ${newToken}` } : {}),
+          ...(orgId ? { 'x-org-id': orgId } : {}),
+          ...headers,
+        },
+        body: body ? JSON.stringify(body) : undefined,
+      });
+
+      if (!retryRes.ok) {
+        const text = await retryRes.text().catch(() => '');
+        throw new ApiError(
+          formatApiError(text, `Request failed with ${retryRes.status}`),
+          retryRes.status,
+        );
+      }
+      return (await retryRes.json().catch(() => ({}))) as T;
+    }
+
     if (typeof window !== 'undefined') {
       useAuthStore.getState().logout();
       window.location.href = '/login';

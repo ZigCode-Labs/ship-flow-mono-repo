@@ -189,15 +189,17 @@ export function DeliveryChallanDetailPanel({
     <div className="flex h-full flex-col overflow-hidden bg-white">
       {/* Toolbar */}
       <div className="flex items-center gap-2 border-b border-slate-200 bg-white px-4 py-2">
-        <Button
-          variant="outline"
-          size="xs"
-          onClick={() => onEdit(deliveryChallan)}
-          className="h-7 gap-1 rounded-sm border-slate-200 bg-white text-[11px] text-slate-700 hover:bg-slate-50"
-        >
-          <Edit className="h-3 w-3" />
-          Edit
-        </Button>
+        {deliveryChallan.status !== 'delivered' && deliveryChallan.status !== 'cancelled' && (
+          <Button
+            variant="outline"
+            size="xs"
+            onClick={() => onEdit(deliveryChallan)}
+            className="h-7 gap-1 rounded-sm border-slate-200 bg-white text-[11px] text-slate-700 hover:bg-slate-50"
+          >
+            <Edit className="h-3 w-3" />
+            Edit
+          </Button>
+        )}
         {deliveryChallan.status !== 'delivered' && deliveryChallan.status !== 'cancelled' && (
           <Button
             size="xs"
