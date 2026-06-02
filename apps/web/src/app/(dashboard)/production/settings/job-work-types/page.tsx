@@ -158,10 +158,9 @@ export default function JobWorkTypesPage() {
             key={formKey}
             formId="job-work-type-form"
             config={{
-              ...formConfig,
+              ...(formConfig as any),
               onSubmit: handleFormSubmit,
             }}
-            initialValues={editingId ? types.find((t) => t.id === editingId) : EMPTY_FORM}
           />
 
           <DialogFooter className="gap-2 sm:space-x-0">
