@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { cn } from '@/lib/utils';
 
 interface ConfirmDialogProps {
   open: boolean;
@@ -22,6 +23,7 @@ interface ConfirmDialogProps {
   onCancel?: () => void;
   onConfirm: () => void;
   variant?: 'destructive' | 'default';
+  className?: string;
 }
 
 export function ConfirmDialog({
@@ -34,6 +36,7 @@ export function ConfirmDialog({
   onCancel,
   onConfirm,
   variant = 'default',
+  className,
 }: ConfirmDialogProps) {
   const handleCancel = () => {
     onCancel?.();
@@ -47,7 +50,7 @@ export function ConfirmDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-sm rounded-lg p-6">
+      <DialogContent className={cn('max-w-sm rounded-lg p-6', className)}>
         <DialogHeader className="space-y-2">
           <DialogTitle className="text-base font-medium">{title}</DialogTitle>
           <DialogDescription className="text-sm text-muted-foreground">

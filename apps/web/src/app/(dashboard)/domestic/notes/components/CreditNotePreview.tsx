@@ -14,6 +14,7 @@ interface CreditNotePreviewProps {
   creditNote: CreditNote;
   sellerName?: string;
   sellerGstin?: string;
+  isVoided?: boolean;
 }
 
 interface DetailRowProps {
@@ -139,11 +140,22 @@ export const CreditNotePreview = ({
   creditNote,
   sellerName = 'global tech company',
   sellerGstin = '',
+  isVoided = false,
 }: CreditNotePreviewProps) => {
   const lineItems = creditNote.lineItems.length > 0 ? creditNote.lineItems : [];
 
   return (
-    <article className="mx-auto w-full max-w-[896px] border border-slate-300 bg-white px-8 py-8 text-black shadow-sm">
+    <article className="relative mx-auto w-full max-w-[896px] border border-slate-300 bg-white px-8 py-8 text-black shadow-sm">
+      {isVoided && (
+        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center overflow-hidden">
+          <span
+            className="rotate-[-25deg] select-none text-[140px] font-black uppercase tracking-widest text-red-300/40"
+            style={{ textShadow: '0 0 20px rgba(239,68,68,0.1)' }}
+          >
+            VOID
+          </span>
+        </div>
+      )}
       <header className="flex items-start justify-between border-b border-slate-200 pb-7">
         <div>
           <h2 className="text-[20px] font-bold leading-7">{sellerName}</h2>

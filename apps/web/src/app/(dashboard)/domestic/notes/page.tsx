@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { CreditNoteDetailPanel } from '@/app/(dashboard)/domestic/notes/components/CreditNoteDetailPanel';
 import { CreditNoteList } from '@/app/(dashboard)/domestic/notes/components/CreditNoteList';
 import type { CreditNote } from '@/app/(dashboard)/domestic/notes/types';
+import { toast } from '@/components/ui/sonner';
 
 const sampleCreditNotes: CreditNote[] = [
   {
@@ -76,6 +77,50 @@ export default function CreditNotesPage() {
     setIsCreatingNew(false);
   };
 
+  const handleSendEmail = (creditNote: CreditNote) => {
+    const updated: CreditNote = { ...creditNote, status: 'sent' };
+    setCreditNotes((prev) => prev.map((cn) => (cn.id === creditNote.id ? updated : cn)));
+    setSelectedCreditNote((prev) => (prev?.id === creditNote.id ? updated : prev));
+  };
+
+  const handleVoid = (creditNote: CreditNote) => {
+    const updated: CreditNote = { ...creditNote, status: 'voided' };
+    setCreditNotes((prev) => {
+      const next = prev.map((cn) => (cn.id === creditNote.id ? updated : cn));
+      localStorage.setItem('credit_notes', JSON.stringify(next));
+      return next;
+    });
+    setSelectedCreditNote((prev) => (prev?.id === creditNote.id ? updated : prev));
+    toast.success('Credit Note Voided', {
+      description: `${creditNote.creditNoteNumber} has been voided.`,
+    });
+  };
+
+  const handleDownloadPDF = async (creditNote: CreditNote) => {
+    try {
+      const [{ pdf }, { CreditNotePDF }] = await Promise.all([
+        import('@react-pdf/renderer'),
+        import('@/components/pdf/CreditNotePDF'),
+      ]);
+      const { createElement } = await import('react');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const blob = await pdf(createElement(CreditNotePDF, { creditNote }) as any).toBlob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${creditNote.creditNoteNumber || 'credit-note'}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      toast.success('PDF Downloaded', {
+        description: `${creditNote.creditNoteNumber || 'credit-note'}.pdf downloaded successfully.`,
+      });
+    } catch {
+      toast.error('Failed to download PDF');
+    }
+  };
+
   return (
     <div className="flex h-full w-full shrink-0 overflow-hidden bg-white">
       <CreditNoteList
@@ -90,6 +135,9 @@ export default function CreditNotesPage() {
           creditNote={selectedCreditNote}
           isCreatingNew={isCreatingNew}
           onCancelForm={handleCancelForm}
+          onDownloadPDF={handleDownloadPDF}
+          onSendEmail={handleSendEmail}
+          onVoid={handleVoid}
         />
       </div>
     </div>

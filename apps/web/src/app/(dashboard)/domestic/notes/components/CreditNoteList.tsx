@@ -48,6 +48,35 @@ export function CreditNoteList({
     return `\u20b9${Math.round(amount || 0).toLocaleString('en-IN')}`;
   };
 
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'voided':
+        return (
+          <Badge className="h-6 rounded-full bg-red-100 px-3 text-[11px] font-medium uppercase text-red-700 hover:bg-red-100">
+            VOID
+          </Badge>
+        );
+      case 'draft':
+        return (
+          <Badge className="h-6 rounded-full bg-gray-100 px-3 text-[11px] font-medium uppercase text-gray-700 hover:bg-gray-100">
+            Draft
+          </Badge>
+        );
+      case 'applied':
+        return (
+          <Badge className="h-6 rounded-full bg-blue-100 px-3 text-[11px] font-medium uppercase text-blue-700 hover:bg-blue-100">
+            Applied
+          </Badge>
+        );
+      default:
+        return (
+          <Badge className="h-6 rounded-full bg-emerald-100 px-3 text-[11px] font-medium uppercase text-emerald-700 hover:bg-emerald-100">
+            Issued
+          </Badge>
+        );
+    }
+  };
+
   return (
     <aside className="flex h-full w-[306px] min-w-[306px] shrink-0 flex-col overflow-hidden bg-white">
       <div className="shrink-0 border-b border-gray-200 bg-white px-4 pb-5 pt-5">
@@ -84,6 +113,7 @@ export function CreditNoteList({
                 onClick={() => onSelectCreditNote(creditNote)}
                 className={cn(
                   'w-full rounded-[7px] border bg-white px-3 py-4 text-left transition-colors hover:bg-gray-50',
+                  creditNote.status === 'voided' && 'border-red-300 bg-red-50/50 hover:bg-red-50',
                   selectedCreditNote?.id === creditNote.id &&
                     'border-red-400 bg-red-50 hover:bg-red-50',
                 )}
@@ -93,9 +123,7 @@ export function CreditNoteList({
                     {creditNote.creditNoteNumber}
                   </span>
                   <div className="flex flex-col items-end gap-2">
-                    <Badge className="h-6 rounded-full bg-emerald-100 px-3 text-[11px] font-medium uppercase text-emerald-700 hover:bg-emerald-100">
-                      Issued
-                    </Badge>
+                    {getStatusBadge(creditNote.status)}
                     <span className="text-[14px] font-bold text-black">
                       {formatAmount(creditNote.grandTotal)}
                     </span>

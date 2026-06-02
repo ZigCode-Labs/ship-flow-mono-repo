@@ -22,6 +22,7 @@ type FormValues = z.infer<typeof schema>;
 export default function LoginPage() {
   const router = useRouter();
   const setToken = useAuthStore((s) => s.setToken);
+  const setRefreshToken = useAuthStore((s) => s.setRefreshToken);
   const setUser = useAuthStore((s) => s.setUser);
   const setActiveOrg = useActiveOrgStore((s) => s.setActiveOrg);
   const resetOrgSetup = useOrgSetupStore((s) => s.reset);
@@ -48,6 +49,7 @@ export default function LoginPage() {
 
       if (!res?.accessToken) throw new Error('Invalid response from server');
       setToken(res.accessToken);
+      if (res.refreshToken) setRefreshToken(res.refreshToken);
       if (res.user) setUser({ id: res.user.id, email: res.user.email });
 
       // Clear any stale org state from previous users/sessions

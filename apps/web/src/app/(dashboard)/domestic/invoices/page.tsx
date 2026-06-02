@@ -228,7 +228,8 @@ export default function TaxInvoicesPage() {
         import('@/components/pdf/TaxInvoicePDF'),
       ]);
       const { createElement } = await import('react');
-      const blob = await pdf(createElement(TaxInvoicePDF, { invoice })).toBlob();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const blob = await pdf(createElement(TaxInvoicePDF, { invoice }) as any).toBlob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -246,7 +247,9 @@ export default function TaxInvoicesPage() {
   };
 
   const handleSendEmail = (invoice: Invoice) => {
-    toast.success(`Email sent to customer for ${invoice.invoiceNumber}`);
+    const updated: Invoice = { ...invoice, status: 'sent' };
+    setInvoices((prev) => prev.map((inv) => (inv.id === invoice.id ? updated : inv)));
+    setSelectedInvoice((prev) => (prev?.id === invoice.id ? updated : prev));
   };
 
   const handleMarkAsPaid = async (invoice: Invoice) => {
