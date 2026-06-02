@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Edit, FileText, Download, Mail, X, RotateCcw } from 'lucide-react';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
+import { Edit, Package, Download, Mail, X, RotateCcw } from 'lucide-react';
 import { DeliveryChallan } from '../types';
 
 interface DeliveryChallanDetailPanelProps {
@@ -109,10 +111,43 @@ function amountInWords(value: number): string {
 
 function EmptyState() {
   return (
-    <div className="flex h-full flex-col items-center justify-center text-slate-400">
-      <FileText className="mb-4 h-16 w-16 text-slate-300" />
-      <h3 className="mb-2 text-lg font-medium">No Delivery Challan Selected</h3>
-      <p className="text-sm">Select a delivery challan from the list or create a new one</p>
+    <div className="flex h-full flex-col overflow-hidden bg-white">
+      {/* Top Bar Shell */}
+      <header className="flex h-12 items-center justify-end border-b border-slate-200 bg-white px-4 shadow-sm" />
+
+      {/* Large Empty State Canvas */}
+      <div className="flex flex-1 flex-col items-center justify-center bg-[#f9fafb] p-4 text-center">
+        <div className="w-full max-w-xs animate-in fade-in slide-in-from-bottom-4 duration-700">
+          {/* Architectural Backdrop (Subtle Glassmorphism) */}
+          <div className="relative mb-3 flex justify-center">
+            <div className="absolute inset-0 scale-150 rounded-full bg-primary/5 opacity-30 blur-3xl" />
+            <div className="relative flex h-14 w-14 items-center justify-center rounded-xl border border-slate-100 bg-white shadow-md">
+              <Package className="h-7 w-7 text-blue-600" />
+            </div>
+          </div>
+          <h2 className="mb-1 text-sm font-extrabold tracking-tight text-slate-700">
+            Select a Delivery Challan
+          </h2>
+          <p className="text-xs font-normal text-slate-400">
+            Choose from the list or create a new one
+          </p>
+          {/* Background Decoration */}
+          <div className="pointer-events-none mt-4 grid grid-cols-3 gap-2 opacity-20">
+            <div className="h-8 rounded-lg bg-slate-200" />
+            <div className="h-8 rounded-lg bg-slate-200" />
+            <div className="h-8 rounded-lg bg-slate-200" />
+          </div>
+        </div>
+      </div>
+
+      {/* Footer Attribution / Status */}
+      <footer className="flex items-center justify-between border-t border-slate-200 bg-white p-3 text-[8px] font-semibold uppercase tracking-widest text-slate-400">
+        <div className="flex items-center gap-1">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-500" />
+          System Operational
+        </div>
+        <div>Domestic Division &copy; 2026</div>
+      </footer>
     </div>
   );
 }
@@ -125,6 +160,8 @@ export function DeliveryChallanDetailPanel({
   onEdit,
   onCancel,
 }: DeliveryChallanDetailPanelProps) {
+  const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
+
   if (!deliveryChallan) {
     return <EmptyState />;
   }
@@ -152,16 +189,18 @@ export function DeliveryChallanDetailPanel({
     <div className="flex h-full flex-col overflow-hidden bg-white">
       {/* Toolbar */}
       <div className="flex items-center gap-2 border-b border-slate-200 bg-white px-4 py-2">
-        <Button
-          variant="outline"
-          size="xs"
-          onClick={() => onEdit(deliveryChallan)}
-          className="h-7 gap-1 rounded-sm border-slate-200 bg-white text-[11px] text-slate-700 hover:bg-slate-50"
-        >
-          <Edit className="h-3 w-3" />
-          Edit
-        </Button>
-        {deliveryChallan.status !== 'delivered' && (
+        {deliveryChallan.status !== 'delivered' && deliveryChallan.status !== 'cancelled' && (
+          <Button
+            variant="outline"
+            size="xs"
+            onClick={() => onEdit(deliveryChallan)}
+            className="h-7 gap-1 rounded-sm border-slate-200 bg-white text-[11px] text-slate-700 hover:bg-slate-50"
+          >
+            <Edit className="h-3 w-3" />
+            Edit
+          </Button>
+        )}
+        {deliveryChallan.status !== 'delivered' && deliveryChallan.status !== 'cancelled' && (
           <Button
             size="xs"
             onClick={() => onMarkAsDelivered(deliveryChallan)}
@@ -189,11 +228,11 @@ export function DeliveryChallanDetailPanel({
           <Mail className="h-3 w-3" />
           Email
         </Button>
-        {deliveryChallan.status !== "cancelled" && (
+        {deliveryChallan.status !== 'cancelled' && (
           <Button
             variant="destructive"
             size="xs"
-            onClick={() => onCancel(deliveryChallan)}
+            onClick={() => setIsCancelDialogOpen(true)}
             className="h-7 gap-1 rounded-sm border-red-200 bg-red-50 text-[11px] text-red-600 hover:bg-red-100"
           >
             <X className="h-3 w-3" />
@@ -299,6 +338,23 @@ export function DeliveryChallanDetailPanel({
           </p>
         </div>
       </div>
+
+      <ConfirmDialog
+        open={isCancelDialogOpen}
+        onOpenChange={setIsCancelDialogOpen}
+        title="Cancel Delivery Challan?"
+        description={
+          <span className="whitespace-nowrap">
+            Are you sure you want to cancel{' '}
+            <strong>{deliveryChallan.challanNumber}</strong>? This cannot be undone.
+          </span>
+        }
+        cancelText="Go Back"
+        confirmText="Yes, Cancel"
+        variant="destructive"
+        className="min-w-[580px] max-w-[95vw]"
+        onConfirm={() => onCancel(deliveryChallan)}
+      />
     </div>
   );
 }

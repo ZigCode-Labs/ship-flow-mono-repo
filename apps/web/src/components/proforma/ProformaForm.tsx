@@ -202,8 +202,8 @@ export function ProformaForm({
 
   // Calculate totals for summary card
   const totals = useMemo(() => {
-    const subtotal = lineItems?.reduce((sum, item) => sum + getAmount(item), 0) || 0;
-    const totalGST = lineItems?.reduce((sum, item) => sum + getItemGSTAmount(item), 0) || 0;
+    const subtotal = lineItems?.reduce((sum: number, item) => sum + getAmount(item), 0) || 0;
+    const totalGST = lineItems?.reduce((sum: number, item) => sum + getItemGSTAmount(item), 0) || 0;
 
     let discountAmount = 0;
     if (discountType === '₹') {

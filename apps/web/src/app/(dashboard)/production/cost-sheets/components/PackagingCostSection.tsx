@@ -106,8 +106,7 @@ function PercentageOfProductionMode({
           <span className="text-sm text-gray-500">%</span>
         </div>
         <p className="text-xs text-gray-500">
-          Computed amount: {symbol}
-          {computedAmount.toFixed(0)} — covers primary + export + labelling collectively
+          Computed amount: {computedAmount.toFixed(0)} — covers primary + export + labelling collectively
         </p>
       </div>
 

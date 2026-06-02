@@ -12,6 +12,12 @@ import { DomesticBuyersModule } from './modules/domestic-buyers/domestic-buyers.
 import { TaxInvoiceModule } from './modules/tax-invoice/tax-invoice.module';
 import { OrganizationsModule } from './modules/organizations/organizations.module';
 import { ProformaEmailModule } from './modules/proforma-email/proforma-email.module';
+import { InvoiceEmailModule } from './modules/invoice-email/invoice-email.module';
+import { CreditNoteEmailModule } from './modules/credit-note-email/credit-note-email.module';
+import { DeliveryChallanEmailModule } from './modules/delivery-challan-email/delivery-challan-email.module';
+import { UserProfileModule } from './modules/user-profile/user-profile.module';
+import { OrgExportSettingsModule } from './modules/org-export-settings/org-export-settings.module';
+import { OrgEmailTemplatesModule } from './modules/org-email-templates/org-email-templates.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 
 @Module({
@@ -26,6 +32,12 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
     TaxInvoiceModule,
     OrganizationsModule,
     ProformaEmailModule,
+    InvoiceEmailModule,
+    CreditNoteEmailModule,
+    DeliveryChallanEmailModule,
+    UserProfileModule,
+    OrgExportSettingsModule,
+    OrgEmailTemplatesModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],

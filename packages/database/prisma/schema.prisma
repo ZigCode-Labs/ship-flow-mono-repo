@@ -7,70 +7,26 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(uuid())
-  email         String   @unique
-  password      String
-  refreshToken  String?  @db.Text
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  firstName     String?
-  lastName      String?
-  emailVerified Boolean  @default(false)
+  id                  String   @id @default(uuid())
+  email               String   @unique
+  password            String
+  refreshToken        String?  @db.Text
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  firstName           String?
+  lastName            String?
+  emailVerified       Boolean  @default(false)
+  profilePhotoUrl     String?
+  twoFactorSecret     String?
+  twoFactorEnabled    Boolean  @default(false)
 
-  memberships   OrganizationMember[]
+  memberships      OrganizationMember[]
 }
 
 model Organization {
   id              String    @id @default(uuid())
   name            String
   slug            String    @unique
-  tradeName       String?
-  iecCode         String?
-  gstNumber       String?
-  panNumber       String?
-  cinNumber       String?
-  registrationNumber String?
-  adCode          String?
-  rcmcNumber      String?
-  rcmcExpiry      DateTime?
-  dgftAuth        String?
-  dgftExpiry      DateTime?
-  addressLine1    String?
-  addressLine2    String?
-  city            String?
-  state           String?
-  pincode         String?
-  country         String    @default("India")
-  phone           String?
-  email           String?
-  website         String?
-  logoUrl         String?
-  signatureUrl    String?
-  stampUrl        String?
-  bankName        String?
-  bankAccountNo   String?
-  bankIFSC        String?
-  bankBranch      String?
-  swiftCode       String?
-  masterCurrency  String    @default("USD")
-  countryOfOrigin String?   @default("India")
-  portOfLoading   String?
-  placeOfReceipt  String?
-  itemCodePrefix  String?
-  itemCodeDigits  Int       @default(4)
-
-  smtpHost        String?
-  smtpPort        Int?
-  smtpFromEmail   String?
-  smtpFromName    String?
-  smtpUseTls      Boolean   @default(true)
-
-  authorizedSignatoryName        String?
-  authorizedSignatoryDesignation String?
-
-  defaultInvoiceTerms  String? @db.Text
-  defaultProformaTerms String? @db.Text
-
   onboardingDone  Boolean   @default(false)
   isActive        Boolean   @default(true)
   createdAt       DateTime  @default(now())
@@ -78,8 +34,145 @@ model Organization {
   deletedAt       DateTime?
 
   members         OrganizationMember[]
+  emailTemplates  OrganizationEmailTemplate[]
+  activeDocuments OrganizationActiveDocument[]
+  profile         OrganizationProfile?
+  compliance      OrganizationCompliance?
+  banking         OrganizationBanking?
+  smtp            OrganizationSmtp?
+  exportDefaults  OrganizationExportDefaults?
 
   @@map("organizations")
+}
+
+model OrganizationProfile {
+  id                           String       @id @default(uuid())
+  organizationId               String       @unique
+  tradeName                    String?
+  addressLine1                 String?
+  addressLine2                 String?
+  city                         String?
+  state                        String?
+  pincode                      String?
+  country                      String       @default("India")
+  fax                          String?
+  phone                        String?
+  phone2                       String?
+  phone3                       String?
+  email                        String?
+  website                      String?
+  logoUrl                      String?
+  signatureUrl                 String?
+  stampUrl                     String?
+  authorizedSignatoryName      String?
+  authorizedSignatoryDesignation String?
+  createdAt                    DateTime     @default(now())
+  updatedAt                    DateTime     @updatedAt
+
+  organization                 Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("organization_profiles")
+}
+
+model OrganizationCompliance {
+  id                      String       @id @default(uuid())
+  organizationId          String       @unique
+  iecCode                 String?
+  gstNumber               String?
+  panNumber               String?
+  cinNumber               String?
+  registrationNumber      String?
+  adCode                  String?
+  rcmcNumber              String?
+  rcmcExpiry              DateTime?
+  dgftAuth                String?
+  dgftExpiry              DateTime?
+  tanNumber               String?
+  ircNo                   String?
+  portRegistrationNumber  String?
+  sedexRegistrationNumber String?
+  complianceNotes         String?      @db.Text
+  createdAt               DateTime     @default(now())
+  updatedAt               DateTime     @updatedAt
+
+  organization            Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("organization_compliances")
+}
+
+model OrganizationBanking {
+  id             String       @id @default(uuid())
+  organizationId String       @unique
+  bankName       String?
+  bankAccountNo  String?
+  bankIFSC       String?
+  bankBranch     String?
+  bankAddress    String?      @db.Text
+  swiftCode      String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("organization_bankings")
+}
+
+model OrganizationSmtp {
+  id             String       @id @default(uuid())
+  organizationId String       @unique
+  smtpEnabled    Boolean      @default(false)
+  smtpHost       String?
+  smtpPort       Int?
+  smtpFromEmail  String?
+  smtpFromName   String?
+  smtpUseTls     Boolean      @default(true)
+  emailReplyTo   String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("organization_smtps")
+}
+
+model OrganizationExportDefaults {
+  id                        String       @id @default(uuid())
+  organizationId            String       @unique
+  masterCurrency            String       @default("USD")
+  countryOfOrigin           String?      @default("India")
+  portOfLoading             String?
+  placeOfReceipt            String?
+  itemCodePrefix            String?
+  itemCodeDigits            Int          @default(4)
+  defaultInvoiceTerms       String?      @db.Text
+  defaultProformaTerms      String?      @db.Text
+  industryType              String?
+  documentSet               String?      @default("standard")
+  defaultAdditionalDetails  String?      @db.Text
+  defaultDescriptionOfGoods String?      @db.Text
+  defaultAdditionalInfo     String?      @db.Text
+  defaultFreightBasis       String?      @db.Text
+  createdAt                 DateTime     @default(now())
+  updatedAt                 DateTime     @updatedAt
+
+  organization              Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("organization_export_defaults")
+}
+
+model OrganizationActiveDocument {
+  id             String       @id @default(uuid())
+  organizationId String
+  documentName   String       @db.VarChar(100)
+  isEnabled      Boolean      @default(true)
+  displayOrder   Int          @default(0)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, documentName])
+  @@map("organization_active_documents")
 }
 
 model OrganizationMember {
@@ -128,7 +221,7 @@ model DomesticProforma {
   validUntil        DateTime
   exchangeRate      Float
   isRateLocked      Boolean                @default(false)
-  
+
   sellerCompanyName String                 @db.VarChar(255)
   sellerGstin       String                 @db.VarChar(50)
   sellerState       String                 @db.VarChar(100)
@@ -139,7 +232,7 @@ model DomesticProforma {
 
   discountValue     Float                  @default(0)
   discountType      String                 @db.VarChar(10) @default("₹")
-  
+
   subtotal          Float
   discountAmount    Float                  @default(0)
   taxableAmount     Float
@@ -150,7 +243,7 @@ model DomesticProforma {
   paymentTerms      String?                @db.Text
   reference         String?                @db.VarChar(255)
   notes             String?                @db.Text
-  
+
   status            String                 @default("DRAFT") @db.VarChar(50)
 
   createdAt         DateTime               @default(now())
@@ -165,7 +258,7 @@ model DomesticProformaItem {
   id               String           @id @default(uuid())
   proformaId       String
   proforma         DomesticProforma @relation(fields: [proformaId], references: [id], onDelete: Cascade)
-  
+
   itemCode         String           @db.VarChar(100)
   description      String           @db.Text
   hsn              String           @db.VarChar(50)
@@ -187,7 +280,7 @@ model DeliveryChallan {
   challanDate       DateTime
   deliveryDate      DateTime?
   deliveryType      String                 @db.VarChar(50) @default("supply_of_goods")
-  
+
   companyName       String                 @db.VarChar(255)
   gstin             String                 @db.VarChar(50) @default("")
   state             String                 @db.VarChar(100) @default("")
@@ -221,6 +314,7 @@ model DeliveryChallan {
   updatedAt         DateTime               @updatedAt
 
   lineItems         DeliveryChallanItem[]
+  emails            DeliveryChallanEmail[]
 
   @@map("delivery_challans")
 }
@@ -229,7 +323,7 @@ model DeliveryChallanItem {
   id               String           @id @default(uuid())
   challanId        String
   challan          DeliveryChallan  @relation(fields: [challanId], references: [id], onDelete: Cascade)
-  
+
   itemCode         String           @db.VarChar(100) @default("")
   description      String           @db.Text
   hsn              String           @db.VarChar(50) @default("")
@@ -244,6 +338,26 @@ model DeliveryChallanItem {
   updatedAt        DateTime         @updatedAt
 
   @@map("delivery_challan_items")
+}
+
+model DeliveryChallanEmail {
+  id             String           @id @default(uuid())
+  challanId      String
+  recipientEmail String           @db.VarChar(255)
+  subject        String           @db.VarChar(500)
+  message        String           @db.Text
+  status         String           @default("pending") @db.VarChar(30)
+  sentAt         DateTime?
+  error          String?          @db.Text
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  challan        DeliveryChallan  @relation(fields: [challanId], references: [id], onDelete: Cascade)
+
+  @@index([challanId])
+  @@index([recipientEmail])
+  @@index([status])
+  @@map("delivery_challan_emails")
 }
 
 model TaxInvoice {
@@ -359,6 +473,23 @@ model EmailContact {
   updatedAt DateTime @updatedAt
 
   @@map("email_contacts")
+}
+
+model OrganizationEmailTemplate {
+  id               String       @id @default(uuid())
+  organizationId   String
+  documentType     String       @db.VarChar(100)
+  subjectTemplate  String       @db.VarChar(500)
+  bodyTemplate     String       @db.Text
+  defaultCc        String?      @db.VarChar(500)
+  defaultBcc       String?      @db.VarChar(500)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, documentType])
+  @@map("organization_email_templates")
 }
 
 model EmailLog {

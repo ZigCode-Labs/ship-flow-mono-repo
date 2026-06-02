@@ -2,14 +2,14 @@
   "extends": "../../packages/typescript-config/nestjs.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "src",
+    "rootDir": ".",
     "baseUrl": ".",
     "removeComments": true,
     "noFallthroughCasesInSwitch": false,
     "jsx": "react",
     "paths": {
-      "@shipflow/shared": ["../../packages/shared/dist/index.d.ts"],
-      "@shipflow/database": ["../../packages/database/dist/index.d.ts"]
+      "@shipflow/shared": ["../../packages/shared/dist"],
+      "@shipflow/database": ["../../packages/database/dist"]
     }
   },
   "include": ["src/**/*", "test/**/*"]

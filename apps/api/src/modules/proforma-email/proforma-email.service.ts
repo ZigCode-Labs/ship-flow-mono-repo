@@ -80,9 +80,16 @@ export class ProformaEmailService {
   }
 
   async createContact(data: CreateBusinessEmailContactDto) {
-    return this.prisma.emailContact.create({
-      data: {
+    return this.prisma.emailContact.upsert({
+      where: { email: data.email },
+      create: {
         email: data.email,
+        name: data.name,
+        company: data.company || null,
+        phone: data.phone || null,
+        notes: data.notes || null,
+      },
+      update: {
         name: data.name,
         company: data.company || null,
         phone: data.phone || null,

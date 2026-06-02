@@ -36,6 +36,7 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { Invoice } from '../types';
 import { TaxInvoicePreview } from './TaxInvoicePreview';
+import { SendInvoiceEmailDialog } from '@/components/invoice/SendInvoiceEmailDialog';
 
 interface InvoiceDetailPanelProps {
   invoice: Invoice | null;
@@ -69,134 +70,6 @@ function EmptyState() {
       </h3>
       <p className="text-[14px] text-slate-400">or create a new one</p>
     </div>
-  );
-}
-
-function EmailInvoiceDialog({
-  invoice,
-  open,
-  onOpenChange,
-  onSend,
-}: {
-  invoice: Invoice;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSend: () => void;
-}) {
-  const pdfName = `${invoice.invoiceNumber || 'invoice'}.pdf`;
-
-  const handleSend = () => {
-    onSend();
-    onOpenChange(false);
-  };
-
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[88vh] max-w-[720px] gap-0 overflow-y-auto rounded-lg border border-slate-200 bg-white p-0 shadow-2xl">
-        <div className="px-7 pb-6 pt-7">
-          <DialogHeader className="space-y-2">
-            <DialogTitle className="flex items-center gap-2 text-xl font-semibold text-slate-950">
-              <Mail className="h-5 w-5" />
-              Send Domestic Invoice via Email
-            </DialogTitle>
-            <DialogDescription className="text-base text-slate-600">
-              Document {invoice.invoiceNumber} will be attached as PDF
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="mt-10 space-y-6">
-            <div className="space-y-3">
-              <label className="text-sm font-semibold text-slate-950">Recipients *</label>
-              <p className="text-sm text-slate-600">
-                Search and select buyers, shipping agents, or contacts
-              </p>
-              <div className="relative">
-                <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                <Input
-                  className="h-11 rounded-md border-slate-200 pl-11 text-sm"
-                  placeholder="Search buyers, agents, or contacts..."
-                />
-              </div>
-              <Button
-                type="button"
-                variant="outline"
-                className="h-10 w-full gap-3 rounded-md border-slate-200 text-sm font-semibold text-slate-950"
-              >
-                <span className="text-xl leading-none">+</span>
-                Add New Contact
-              </Button>
-            </div>
-
-            <div className="border-t border-slate-200 pt-5">
-              <label className="flex items-center gap-4 rounded-lg border border-blue-200 bg-blue-50/80 px-4 py-4">
-                <input
-                  type="checkbox"
-                  checked
-                  readOnly
-                  className="h-4 w-4 rounded border-blue-300 text-blue-600"
-                />
-                <FileText className="h-5 w-5 text-blue-600" />
-                <span>
-                  <span className="block text-sm font-semibold text-slate-950">
-                    Attach PDF: {pdfName}
-                  </span>
-                  <span className="block text-sm text-slate-600">
-                    Domestic Invoice will be attached to the email
-                  </span>
-                </span>
-              </label>
-            </div>
-
-            <div className="border-t border-slate-200 pt-5">
-              <label className="mb-3 block text-sm font-semibold text-slate-950">
-                CC (comma-separated)
-              </label>
-              <Input
-                className="h-11 rounded-md border-slate-200 text-sm"
-                placeholder="cc1@example.com, cc2@example.com"
-              />
-            </div>
-
-            <div className="border-t border-slate-200 pt-5">
-              <label className="mb-3 block text-sm font-semibold text-slate-950">Subject *</label>
-              <Input
-                className="h-11 rounded-md border-slate-200 text-sm"
-                placeholder="Subject line"
-              />
-            </div>
-
-            <div className="space-y-3">
-              <label className="block text-sm font-semibold text-slate-950">Message</label>
-              <Textarea
-                className="min-h-[190px] resize-y rounded-md border-slate-200 text-sm"
-                placeholder="Email message body"
-              />
-            </div>
-          </div>
-        </div>
-
-        <DialogFooter className="sticky bottom-0 border-t border-slate-100 bg-white px-7 py-6">
-          <DialogClose asChild>
-            <Button
-              type="button"
-              variant="outline"
-              className="h-11 rounded-md px-6 text-sm font-semibold"
-            >
-              <XCircle className="mr-2 h-4 w-4" />
-              Cancel
-            </Button>
-          </DialogClose>
-          <Button
-            type="button"
-            onClick={handleSend}
-            className="h-11 rounded-md bg-blue-600 px-7 text-sm font-semibold text-white hover:bg-blue-700"
-          >
-            <Send className="mr-2 h-4 w-4" />
-            Send Email
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
   );
 }
 
@@ -736,9 +609,7 @@ export function InvoiceDetailPanel({
   };
 
   const handleSendEmail = () => {
-    setBusyAction('email');
-    onSendEmail?.(invoice);
-    setBusyAction(null);
+    setIsEmailDialogOpen(true);
   };
 
   const handleDownloadPDF = () => {
@@ -930,11 +801,11 @@ export function InvoiceDetailPanel({
         </div>
       </div>
 
-      <EmailInvoiceDialog
+      <SendInvoiceEmailDialog
         invoice={invoice}
         open={isEmailDialogOpen}
         onOpenChange={setIsEmailDialogOpen}
-        onSend={handleSendEmail}
+        onSent={() => onSendEmail?.(invoice)}
       />
       <RecordPaymentDialog
         invoice={invoice}
